@@ -1,9 +1,12 @@
 package com.edu.duongdua.core.controller;
 
+import com.edu.duongdua.core.Main;
 import com.edu.duongdua.core.model.Account;
 import com.edu.duongdua.core.model.Classes;
 import com.edu.duongdua.core.view.Scene_ManageClass;
+import com.edu.duongdua.core.view.Scene_ManageDiary;
 import com.edu.duongdua.core.view.Scene_ManageStudent;
+import com.edu.duongdua.core.view.Scene_SideBar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -76,16 +79,18 @@ public class ManageClassController extends Controller implements EventHandler<Ev
         return classesList;
     }
 
-    public void renderClassInfo(Event event)
+    public ObservableList<Account> getStudentList(String className)
     {
-        VBox vBox = (VBox) event.getSource();
-        HBox hBox = (HBox) vBox.getParent();
-        VBox vBox1 = (VBox) hBox.getParent();
-        Label classNameLabel = (Label) vBox1.getChildren().getFirst();
-        Label teacherNameLabel = (Label) vBox.getChildren().getFirst();
-
-        sceneManageClass.createClassInfoModalStage(classNameLabel.getText(), teacherNameLabel.getText().substring(11));
-        renderTblStudents(classNameLabel.getText());
+        final ObservableList<Account> data = FXCollections.observableArrayList();
+        List<Account> studentList = accountDAO.getAllAccountByRole(4);
+        for (Account student : studentList)
+        {
+            if (student.getClassId() == classesDao.findByName(className).getClassId())
+            {
+                data.add(student);
+            }
+        }
+        return data;
     }
 
     public void storeClass()
@@ -207,22 +212,6 @@ public class ManageClassController extends Controller implements EventHandler<Ev
         return false;
     }
 
-    public void renderTblStudents(String className)
-    {
-        final ObservableList<Account> data = FXCollections.observableArrayList();
-        List<Account> studentList = accountDAO.getAllAccountByRole(4);
-        for (Account student : studentList)
-        {
-            if (student.getClassId() == classesDao.findByName(className).getClassId())
-            {
-                data.add(student);
-            }
-        }
-        sceneManageClass.nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        sceneManageClass.ageCol.setCellValueFactory(new PropertyValueFactory<>("age"));
-        sceneManageClass.studentTable.setItems(data);
-    }
-
     public void handleOnAction(ActionEvent event) {
         String selectedValue = sceneManageClass.comboBox.getValue();
         int status = selectedValue.equals("Đang hoạt động") ? 1 : 2;
@@ -276,7 +265,13 @@ public class ManageClassController extends Controller implements EventHandler<Ev
                 }
                 break;
             case "classInfoBtn":
-                renderClassInfo(event);
+                VBox vBox = (VBox) event.getSource();
+                HBox hBox = (HBox) vBox.getParent();
+                VBox vBox1 = (VBox) hBox.getParent();
+                Label classNameLabel = (Label) vBox1.getChildren().getFirst();
+                Label teacherNameLabel = (Label) vBox.getChildren().getFirst();
+                sceneManageClass.createClassInfoModalStage(classNameLabel.getText(), teacherNameLabel.getText().substring(11));
+                sceneManageClass.renderTblStudents(getStudentList(classNameLabel.getText()));
                 break;
             case "exportExcelBtn":
                 sceneManageClass.createExportModalStage();

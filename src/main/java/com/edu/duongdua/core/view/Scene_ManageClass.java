@@ -1,8 +1,10 @@
 package com.edu.duongdua.core.view;
 
+import com.edu.duongdua.core.Main;
 import com.edu.duongdua.core.controller.ManageClassController;
 import com.edu.duongdua.core.model.Account;
 import com.edu.duongdua.core.model.Classes;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -11,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -337,6 +340,7 @@ public class Scene_ManageClass
         vbox.setStyle("-fx-background-color:  #30475E; -fx-background-radius: 8");
 
         classNameLabel = new Label(classObj.getClassName());
+        classNameLabel.setId("classNameBtn");
         classNameLabel.setId(classObj.getClassName());
         classNameLabel.setMinSize(240, 46);
         classNameLabel.setPrefSize(240, 46);
@@ -346,7 +350,7 @@ public class Scene_ManageClass
         if (classObj.getClassDeleted() == 1)
         {
             classNameLabel.setCursor(Cursor.HAND);
-//            classNameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+            classNameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
         }
         classNameLabel.setStyle("-fx-font-weight: bold; -fx-background-color:  #F05454; -fx-background-radius: 8 8 0 0");
 
@@ -463,6 +467,13 @@ public class Scene_ManageClass
         {
             cbClasses.getItems().add(_class.getClassName());
         }
+    }
+
+    public void renderTblStudents(ObservableList<Account> studentList)
+    {
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ageCol.setCellValueFactory(new PropertyValueFactory<>("age"));
+        studentTable.setItems(studentList);
     }
 
     public void addEventListener(EventHandler<Event> eventHandler)
