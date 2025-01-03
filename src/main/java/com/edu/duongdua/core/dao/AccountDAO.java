@@ -288,14 +288,14 @@ public class AccountDAO extends Account {
         }
         return teacher;
     }
-    public Account getTeacherData(Lesson lesson)
+    public Account getTeacherData(String className)
     {
         String sql = "SELECT DISTINCT accounts.id AS account_id, accounts.name AS teacher_name, accounts.salary, "
                 + "COUNT(lessons.id) AS lesson_count, "
                 + "CAST(DATE_FORMAT(STR_TO_DATE(lessons.title, '%d/%m/%Y'), '%m/%Y') AS CHAR) AS month "
                 + "FROM classes JOIN lessons ON classes.id = lessons.class_id "
                 + "LEFT JOIN accounts ON classes.teacher_id = accounts.id "
-                + "WHERE classes.name = '" +lesson.getClassName()+ "' AND classes.deleted = 1 "
+                + "WHERE classes.name = '" +className+ "' AND classes.deleted = 1 "
                 + "GROUP BY accounts.id, accounts.name, accounts.salary, month";
         PreparedStatement ps;
         Account teacher = new Account();
