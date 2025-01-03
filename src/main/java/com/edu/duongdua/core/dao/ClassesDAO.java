@@ -46,13 +46,13 @@ public class ClassesDAO extends Classes
     public List<Classes> getClassesInfo(int isDeleted)
     {
         List<Classes> classesInfo = new ArrayList<>();
-        String sql = "SELECT c.id, c.name AS class_name, a_teacher.name AS teacher_name, "
+        String sql = "SELECT c.id, c.name AS class_name, a_teacher.name AS teacher_name, c.deleted, "
                 + "COUNT(a_student.id) AS total_students FROM classes c "
                 + "LEFT JOIN accounts a_teacher ON c.teacher_id = a_teacher.id "
                 + "AND a_teacher.role = 2 LEFT JOIN accounts a_student "
                 + "ON c.id = a_student.class_id AND a_student.role = 4 "
                 + "WHERE a_teacher.status = 1 AND c.deleted = " +isDeleted+
-                " GROUP BY c.id, c.name, a_teacher.name "
+                " GROUP BY c.id, c.name, a_teacher.name, c.deleted "
                 + "ORDER BY c.id";
         PreparedStatement ps;
         try {
@@ -61,10 +61,10 @@ public class ClassesDAO extends Classes
             while (rs.next())
             {
                 Classes _class = new Classes();
-//                _class.setClassId(rs.getInt("id"));
                 _class.setClassName(rs.getString("class_name"));
                 _class.setClassTeacherName(rs.getString("teacher_name"));
                 _class.setClassTotalStudents(rs.getInt("total_students"));
+                _class.setClassDeleted(rs.getInt("deleted"));
                 classesInfo.add(_class);
             }
         } catch (SQLException e) {
