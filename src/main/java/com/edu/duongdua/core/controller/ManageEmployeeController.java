@@ -35,6 +35,7 @@ public class ManageEmployeeController extends Controller implements EventHandler
                 Bill billObj = new Bill();
                 billObj.setAccount_id(employee.getId());
                 billObj.setTime(time);
+                billObj.setTotal_price(employee.getSalary());
                 System.out.println(time);
                 billObj.setType(2);
                 boolean isDuplicate = false;
@@ -65,7 +66,6 @@ public class ManageEmployeeController extends Controller implements EventHandler
         List<Bill> billList = billDAO.getAllBill();
         for(Bill bill : billList){
             if(employeeId == bill.getAccount_id()){
-                bill.setTotal_price((accountDAO.findEmployeeById(employeeId).getSalary()));
                 BillList.add(bill);
             }
         }
