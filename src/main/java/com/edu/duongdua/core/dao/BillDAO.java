@@ -120,7 +120,7 @@ public class BillDAO extends Bill {
         List<Bill> bills = new ArrayList<>();
         String sql = "SELECT b.time AS month, COUNT(DISTINCT a.id) AS count_members, "
                 + "AVG(a.age) AS avg_age FROM bills b JOIN accounts a ON b.account_id = a.id "
-                + "WHERE a.role = " +role+ " GROUP BY b.time ORDER BY b.time";
+                + "WHERE a.role = " +role+ " GROUP BY b.time ORDER BY RIGHT(b.time, 4), LEFT(b.time, 2)";
         PreparedStatement ps;
         try {
             ps = conn.prepareStatement(sql);
