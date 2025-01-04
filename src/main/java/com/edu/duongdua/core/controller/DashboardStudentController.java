@@ -20,7 +20,7 @@ public class DashboardStudentController extends Controller {
         sceneDashboardStudent.setUpLineChart();
         sceneDashboardStudent.setUpStudentData();
     }
-    Scene_DashboardStudent sceneDashboardStudent = new Scene_DashboardStudent();
+    public Scene_DashboardStudent sceneDashboardStudent = new Scene_DashboardStudent();
 
 
     public void countStudentAge(){
