@@ -27,9 +27,8 @@ public class Scene_DashboardTeacherEmployee
 {
     private LocalDate today = LocalDate.now();
     private Integer currentMonth = today.getMonthValue();
-    private Integer currentYear = today.getYear();
+    public Integer currentYear = today.getYear();
     private String time = currentMonth.toString() + "/" + currentYear.toString();
-    private int year = 0;
 
     private AnchorPane anchorPane;
 
@@ -182,6 +181,7 @@ public class Scene_DashboardTeacherEmployee
 
     public void renderLineChart(List<Bill> teacherStatistical, List<Bill> employeeStatistical)
     {
+        lineChart.getData().clear();
         yAxis.setLabel("Số lượng");
         // Giáo viên
         XYChart.Series<String, Number> dataSeriesTeachers = new XYChart.Series<>();

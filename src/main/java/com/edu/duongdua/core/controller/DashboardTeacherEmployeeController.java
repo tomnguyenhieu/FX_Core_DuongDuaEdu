@@ -15,6 +15,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DashboardTeacherEmployeeController extends Controller implements EventHandler<Event>
@@ -25,30 +26,22 @@ public class DashboardTeacherEmployeeController extends Controller implements Ev
     public DashboardTeacherEmployeeController()
     {
         sceneDashboardTeacherEmployee.addActionListener(this);
-        sceneDashboardTeacherEmployee.renderLineChart(getTeacherStatistical(), getEmployeeStatistical());
-        sceneDashboardTeacherEmployee.initBoxData(getTeacherStatistical(), getEmployeeStatistical());
         sceneDashboardTeacherEmployee.initYearsComboBox(getComboBoxYears());
+        sceneDashboardTeacherEmployee.initBoxData(getStatistcal(2, sceneDashboardTeacherEmployee.currentYear), getStatistcal(3, sceneDashboardTeacherEmployee.currentYear));
         sceneDashboardTeacherEmployee.addOnActionListener(this::handleOnAction);
     }
 
-    public List<Bill> getTeacherStatistical()
+    public List<Bill> getStatistcal(int role, int year)
     {
-        List<Bill> teacherStatisticalList = new ArrayList<>();
-        for (Bill bill : billDAO.getBillStatistical(2))
+        List<Bill> statisticalList = new ArrayList<>();
+        for (Bill bill : billDAO.getBillStatistical(role))
         {
-            teacherStatisticalList.add(bill);
+            if (bill.getTime().substring(3).equals(Integer.toString(year)))
+            {
+                statisticalList.add(bill);
+            }
         }
-        return teacherStatisticalList;
-    }
-
-    public List<Bill> getEmployeeStatistical()
-    {
-        List<Bill> employeeStatisticalList = new ArrayList<>();
-        for (Bill bill : billDAO.getBillStatistical(3))
-        {
-            employeeStatisticalList.add(bill);
-        }
-        return employeeStatisticalList;
+        return statisticalList;
     }
 
     public List<Integer> getComboBoxYears()
@@ -124,6 +117,7 @@ public class DashboardTeacherEmployeeController extends Controller implements Ev
     public void handleOnAction(ActionEvent event) {
         selectedValue = sceneDashboardTeacherEmployee.yearComboBox.getValue();
         sceneDashboardTeacherEmployee.renderTeachersTable(getTeachers());
+        sceneDashboardTeacherEmployee.renderLineChart(getStatistcal(2, selectedValue), getStatistcal(3, selectedValue));
     }
 
     @Override
