@@ -20,7 +20,7 @@ public class BillDAO extends Bill {
     public List<Bill> getAllBill()
     {
         List<Bill> bills = new ArrayList<>();
-        String sql = "SELECT * FROM bills ORDER BY time";
+        String sql = "SELECT * FROM bills ORDER BY RIGHT(time, 4), LEFT(time, 2)";
         PreparedStatement ps;
         try {
             ps = conn.prepareStatement(sql);
