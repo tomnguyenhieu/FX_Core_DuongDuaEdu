@@ -20,26 +20,4 @@ public class Controller
     public List<Lesson> lessonList = lessonDAO.getAllLessons();
     public List<Comment> commentList = commentDAO.getAllComments();
     public List<Bill> billList = billDAO.getAllBill();
-
-    private static Controller instance;
-    private String className;
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public Controller() {}
-
-    public static Controller getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new Controller();
-        }
-        return instance;
-    }
 }

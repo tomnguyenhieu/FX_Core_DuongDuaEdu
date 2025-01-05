@@ -97,10 +97,9 @@ public class ManageClassController extends Controller implements EventHandler<Ev
     public void loadDiaryScene(Event event)
     {
         Label label = (Label) event.getSource();
-        Controller.getInstance().setClassName(label.getText());
         BorderPane borderPane = (BorderPane) label.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent();
 
-        ManageDiaryController manageDiaryController = new ManageDiaryController();
+        ManageDiaryController manageDiaryController = new ManageDiaryController(label.getText());
         borderPane.setCenter(manageDiaryController.sceneManageDiary.getAnchorPane());
     }
 

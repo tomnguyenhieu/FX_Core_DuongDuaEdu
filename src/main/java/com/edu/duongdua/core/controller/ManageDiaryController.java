@@ -35,11 +35,13 @@ public class ManageDiaryController extends Controller implements EventHandler<Ev
     private int btnLessonId = 0;
     private Lesson lesson = new Lesson();
     private File file;
+    private String className;
 
     Scene_ManageDiary sceneManageDiary = new Scene_ManageDiary();
 
-    public ManageDiaryController()
+    public ManageDiaryController(String className)
     {
+        this.className = className;
         sceneManageDiary.addEventListener(this);
         getLessonCount();
         sceneManageDiary.displayLessons(count, this);
@@ -50,7 +52,7 @@ public class ManageDiaryController extends Controller implements EventHandler<Ev
         count = 0;
         for (int i = 0; i < lessonDAO.getAllLessons().size(); i++)
         {
-            if (lessonDAO.getAllLessons().get(i).getClassId() == classesDao.findByName(Controller.getInstance().getClassName()).getClassId())
+            if (lessonDAO.getAllLessons().get(i).getClassId() == classesDao.findByName(className).getClassId())
             {
                 count++;
             }
@@ -69,7 +71,7 @@ public class ManageDiaryController extends Controller implements EventHandler<Ev
     public ObservableList<Lesson> getSelectedLesson(int btnLessonId)
     {
         final ObservableList<Lesson> lessonObservableList = FXCollections.observableArrayList();
-        List<Lesson> lessonList = lessonDAO.getLessonsByClassId(classesDao.findByName(Controller.getInstance().getClassName()));
+        List<Lesson> lessonList = lessonDAO.getLessonsByClassId(classesDao.findByName(className));
         for (int i = 0; i < lessonList.size(); i++)
         {
             if (i == (btnLessonId-1))
@@ -366,7 +368,7 @@ public class ManageDiaryController extends Controller implements EventHandler<Ev
                 sceneManageDiary.resetAllBtn(count);
                 sceneManageDiary.tblComment1.getItems().clear();
                 sceneManageDiary.tblComment2.getItems().clear();
-                addTeacherBill(Controller.getInstance().getClassName());
+                addTeacherBill(className);
                 addStudentBill(file);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("Tải lên thành công!");
