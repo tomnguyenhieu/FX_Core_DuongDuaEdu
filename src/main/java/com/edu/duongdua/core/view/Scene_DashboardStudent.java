@@ -2,9 +2,12 @@ package com.edu.duongdua.core.view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.*;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.BlurType;
@@ -22,6 +25,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.util.List;
+
 public class Scene_DashboardStudent {
     private AnchorPane anchorPane = new AnchorPane();
     public AnchorPane getAnchorPane(){
@@ -36,8 +41,10 @@ public class Scene_DashboardStudent {
     private Label femaleStudentLabel = new Label("0");
     private Label maleStudentLabel = new Label("0");
     private Label avgAgeLabel = new Label("0");
-    double maxLesson = 10;
-    double maxStudent = 10;
+    public ComboBox<Integer> yearComboBox = new ComboBox<>();
+
+    double maxLesson = 50;
+    double maxStudent = 20;
     int ageUnder12Count = 0;
     int ageUnder22Count = 0;
     int ageOver22Count = 0;
@@ -77,11 +84,29 @@ public class Scene_DashboardStudent {
         anchorPane.setStyle("-fx-background-color: #F4F4F4;");
         anchorPane.setPadding(new Insets(5,0,0,0));
 
+        Label label = new Label("Tổng số học viên năm ");
+        label.setFont(Font.font("System", FontWeight.NORMAL, 20));
+
+        yearComboBox.setPrefSize(120, 50);
+//        yearComboBox.setStyle("-fx-background-color: #30475E;");
+
+        HBox yearChartHbox = new HBox(label, yearComboBox);
+        yearChartHbox.setAlignment(Pos.CENTER);
+        yearChartHbox.setPadding(new Insets(0,0,0,20));
+//        yearChartHbox.setSpacing(60);
+
+        VBox lineChartVbox = new VBox(yearChartHbox, totalStudentLineChart);
+        lineChartVbox.setPrefWidth(638);
+        lineChartVbox.setPrefHeight(330);
+//        lineChartVbox.setPadding(new Insets(0,0,0,0));
+
+
         // Hbox phía trên
-        HBox hBox = new HBox(studentDataVbox(), totalStudentLineChart);
+        HBox hBox = new HBox(studentDataVbox(), lineChartVbox);
         hBox.setPrefWidth(972);
         hBox.setPrefHeight(340);
         hBox.setPadding(new Insets(10,10,10,10));
+        hBox.setSpacing(5);
 
         // Hbox phía dưới
         HBox hBox1 = new HBox(agePieChart, topStudentVbox(), classesDataVbox());
@@ -401,14 +426,30 @@ public class Scene_DashboardStudent {
         classesDataContainer.getChildren().add(vBox);
     }
 
+    public void setUpYearComboBox(List<String> years){
+        yearComboBox.setPromptText("Chọn Năm");
+        for(String year : years){
+            yearComboBox.getItems().add(Integer.parseInt(year));
+        }
+    }
+
     public void setUpLineChart(){
-        totalStudentLineChart.setPrefHeight(340);
-        totalStudentLineChart.setPrefWidth(638);
-        totalStudentLineChart.setTitle("Tổng số học viên theo tháng");
         totalStudentLineChart.setLegendVisible(false);
         totalStudentLineChart.setStyle("-fx-background-color: #F4F4F4");
-        numberAxis.setLabel("Số học viên");
+        numberAxis.setLabel("Lượng học viên");
+        categoryAxis.setLabel("Tháng");
+    }
 
+    public void refreshLineChart(List<List<Integer>> dataList){
+        dataSeries.getData().clear();
+        XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
+        for(List<Integer> year : dataList){
+            int month = year.get(0);
+            int totalStudent = year.get(1);
+            dataSeries.getData().add(new XYChart.Data<>(Integer.toString(month), totalStudent));
+            System.out.println(month + " " + totalStudent);
+        }
+        totalStudentLineChart.getData().clear();
         totalStudentLineChart.getData().add(dataSeries);
     }
 
@@ -436,5 +477,9 @@ public class Scene_DashboardStudent {
         numberAnim(avgAgeLabel, avgStudentAge);
         numberAnim(maleStudentLabel, maleStudent);
         numberAnim(femaleStudentLabel, femaleStudent);
+    }
+
+    public void onActionListener(EventHandler<ActionEvent> eventHandler) {
+        yearComboBox.setOnAction(eventHandler);
     }
 }

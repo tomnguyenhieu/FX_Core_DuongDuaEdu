@@ -2,6 +2,7 @@ package com.edu.duongdua.core.controller;
 
 import com.edu.duongdua.core.model.*;
 import com.edu.duongdua.core.view.Scene_DashboardStudent;
+import javafx.event.ActionEvent;
 import javafx.scene.chart.XYChart;
 
 import java.time.LocalDate;
@@ -14,14 +15,36 @@ public class DashboardStudentController extends Controller {
         sceneDashboardStudent.setUpPieChart();
         caculateAvgStudentAge();
         countStudentByGender();
-        countTotalStudentByMonth();
         sortTopStudent();
         countClassData();
+        sceneDashboardStudent.setUpYearComboBox(getYears());
+        sceneDashboardStudent.onActionListener(this::handleOnAction);
         sceneDashboardStudent.setUpLineChart();
         sceneDashboardStudent.setUpStudentData();
     }
     public Scene_DashboardStudent sceneDashboardStudent = new Scene_DashboardStudent();
 
+    public List<String> getYears(){
+        List<String> yearList = new ArrayList<>();
+        for(Lesson lesson : lessonList){
+            String year = lesson.getTitle().substring(6);
+            if(!yearList.contains(year)){
+                yearList.add(year);
+            }
+        }
+        for(int i = 1; i < yearList.size(); i++){
+            // Insertion sort
+            String key = yearList.get(i);
+            int j = i-1;
+
+            while(j >= 0 && Integer.parseInt(yearList.get(j)) < Integer.parseInt(key)){
+                yearList.set(j+1, yearList.get(j));
+                j = j - 1;
+            }
+            yearList.set(j + 1, key);
+        }
+        return yearList;
+    }
 
     public void countStudentAge(){
         int ageUnder12Count = 0;
@@ -76,29 +99,45 @@ public class DashboardStudentController extends Controller {
         sceneDashboardStudent.setFemaleStudent(femaleCount);
     }
 
-    public void countTotalStudentByMonth(){
+    public List<List<Integer>> countTotalStudentByYear(String year){
+        List<List<Integer>> dataList = new ArrayList<>();
         List<String> monthArr = new ArrayList<>();
-        // Với mỗi lesson, đếm học sinh dựa trên comment
+
         for(Lesson lesson : lessonList){
-            String month = lesson.getTitle().substring(3);
-            int total_student = 0;
-            // Tạo list học sinh để kiểm tra trùng
-            List<Integer> studentIdList = new ArrayList<>();
-            for(Comment comment : commentList){
-                // Với mỗi comment hay học sinh của lesson
-                int studentId = comment.getStudentId();
-                if(comment.getLessonId() == lesson.getId() && !studentIdList.contains(studentId)){
-                    // Học sinh học lesson chưa được đếm
-                    total_student++;
-                    studentIdList.add(studentId);
+            if(lesson.getTitle().substring(6).equals(year)){
+                List<Integer> monthList = new ArrayList<>();
+                String month = lesson.getTitle().substring(3,5);
+                int totalStudent = 0;
+                List<Integer> studentIdList = new ArrayList<>();
+                for(Comment comment : commentList){
+                    int studentId = comment.getStudentId();
+                    if(comment.getLessonId() == lesson.getId() && !studentIdList.contains(studentId)){
+                        totalStudent++;
+                        studentIdList.add(studentId);
+                    }
+                }
+                if(!monthArr.contains(month)){
+                    // Chưa có tháng của lesson hiện tại
+                    monthArr.add(lesson.getTitle().substring(3,5));
+                    monthList.add(Integer.parseInt(month));
+                    monthList.add(totalStudent);
+                    dataList.add(monthList);
                 }
             }
-            if(!monthArr.contains(month)){
-                // Chưa có tháng của lesson hiện tại
-                monthArr.add(lesson.getTitle().substring(3));
-                sceneDashboardStudent.setDataSeries(month, total_student);
-            }
         }
+
+        for(int i = 1; i < dataList.size(); i++){
+            // Insertion sort
+            List<Integer> key = dataList.get(i);
+            int j = i-1;
+
+            while(j >= 0 && dataList.get(j).getFirst() > key.getFirst()){
+                dataList.set(j+1, dataList.get(j));
+                j = j - 1;
+            }
+            dataList.set(j + 1, key);
+        }
+        return dataList;
     }
 
     public void sortTopStudent(){
@@ -166,5 +205,11 @@ public class DashboardStudentController extends Controller {
             }
             sceneDashboardStudent.setUpClassData(name, totalStudent, totalLesson);
         }
+    }
+
+    public void handleOnAction(ActionEvent event){
+        String year = sceneDashboardStudent.yearComboBox.getValue().toString();
+        sceneDashboardStudent.refreshLineChart(countTotalStudentByYear(year));
+        System.out.println(year);
     }
 }
