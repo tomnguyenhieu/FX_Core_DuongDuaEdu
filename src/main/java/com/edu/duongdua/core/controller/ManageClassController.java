@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -91,6 +92,16 @@ public class ManageClassController extends Controller implements EventHandler<Ev
             }
         }
         return data;
+    }
+
+    public void loadDiaryScene(Event event)
+    {
+        Label label = (Label) event.getSource();
+        Controller.getInstance().setClassName(label.getText());
+        BorderPane borderPane = (BorderPane) label.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent();
+
+        ManageDiaryController manageDiaryController = new ManageDiaryController();
+        borderPane.setCenter(manageDiaryController.sceneManageDiary.getAnchorPane());
     }
 
     public void storeClass()
@@ -200,6 +211,7 @@ public class ManageClassController extends Controller implements EventHandler<Ev
                     }
                     try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                         workbook.write(fileOut);
+                        fileOut.close();
                         return true;
                     }
                 }
@@ -212,7 +224,8 @@ public class ManageClassController extends Controller implements EventHandler<Ev
         return false;
     }
 
-    public void handleOnAction(ActionEvent event) {
+    public void handleOnAction(ActionEvent event)
+    {
         String selectedValue = sceneManageClass.comboBox.getValue();
         int status = selectedValue.equals("Đang hoạt động") ? 1 : 2;
         sceneManageClass.getTilePane().getChildren().clear();
@@ -231,6 +244,9 @@ public class ManageClassController extends Controller implements EventHandler<Ev
                 break;
             case "trashBtn":
                 deleteClass(event);
+                break;
+            case "classNameBtn":
+                loadDiaryScene(event);
                 break;
             case "confirmBtn":
                 if (!sceneManageClass.edit)

@@ -339,9 +339,9 @@ public class Scene_ManageClass
         vbox.setPrefSize(240, 150);
         vbox.setStyle("-fx-background-color:  #30475E; -fx-background-radius: 8");
 
-        classNameLabel = new Label(classObj.getClassName());
+        classNameLabel = new Label();
+        classNameLabel.setText(classObj.getClassName());
         classNameLabel.setId("classNameBtn");
-        classNameLabel.setId(classObj.getClassName());
         classNameLabel.setMinSize(240, 46);
         classNameLabel.setPrefSize(240, 46);
         classNameLabel.setFont(new Font("Roboto", 24));
@@ -372,9 +372,6 @@ public class Scene_ManageClass
         if (classObj.getClassDeleted() == 1)
         {
             vboxText.setCursor(Cursor.HAND);
-//            vboxText.setOnMouseClicked(event -> {
-//                createClassInfoModalStage(classObj);
-//            });
             vboxText.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
         }
 
@@ -471,6 +468,7 @@ public class Scene_ManageClass
 
     public void renderTblStudents(ObservableList<Account> studentList)
     {
+        studentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         ageCol.setCellValueFactory(new PropertyValueFactory<>("age"));
         studentTable.setItems(studentList);

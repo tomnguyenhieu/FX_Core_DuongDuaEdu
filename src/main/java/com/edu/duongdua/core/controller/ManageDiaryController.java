@@ -4,6 +4,7 @@ import com.edu.duongdua.core.model.Account;
 import com.edu.duongdua.core.model.Bill;
 import com.edu.duongdua.core.model.Comment;
 import com.edu.duongdua.core.model.Lesson;
+import com.edu.duongdua.core.view.Scene_ManageClass;
 import com.edu.duongdua.core.view.Scene_ManageDiary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,7 +50,7 @@ public class ManageDiaryController extends Controller implements EventHandler<Ev
         count = 0;
         for (int i = 0; i < lessonDAO.getAllLessons().size(); i++)
         {
-            if (lessonDAO.getAllLessons().get(i).getClassId() == 1)
+            if (lessonDAO.getAllLessons().get(i).getClassId() == classesDao.findByName(Controller.getInstance().getClassName()).getClassId())
             {
                 count++;
             }
@@ -68,7 +69,7 @@ public class ManageDiaryController extends Controller implements EventHandler<Ev
     public ObservableList<Lesson> getSelectedLesson(int btnLessonId)
     {
         final ObservableList<Lesson> lessonObservableList = FXCollections.observableArrayList();
-        List<Lesson> lessonList = lessonDAO.getLessonsByClassId(classesDao.findByName("22CN5"));
+        List<Lesson> lessonList = lessonDAO.getLessonsByClassId(classesDao.findByName(Controller.getInstance().getClassName()));
         for (int i = 0; i < lessonList.size(); i++)
         {
             if (i == (btnLessonId-1))
@@ -365,7 +366,7 @@ public class ManageDiaryController extends Controller implements EventHandler<Ev
                 sceneManageDiary.resetAllBtn(count);
                 sceneManageDiary.tblComment1.getItems().clear();
                 sceneManageDiary.tblComment2.getItems().clear();
-                addTeacherBill("22CN5");
+                addTeacherBill(Controller.getInstance().getClassName());
                 addStudentBill(file);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("Tải lên thành công!");
