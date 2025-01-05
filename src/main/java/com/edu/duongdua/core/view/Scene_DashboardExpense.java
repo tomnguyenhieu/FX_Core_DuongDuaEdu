@@ -1,5 +1,6 @@
 package com.edu.duongdua.core.view;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -7,9 +8,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -45,6 +48,7 @@ public class Scene_DashboardExpense
     Label totalStaffsSalary = new Label();
     Label totalExpenseValue = new Label();
     Label totalCSVC = new Label();
+    public ComboBox<Integer> comboBox;
 
     LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
     CategoryAxis xAxis2 = new CategoryAxis();
@@ -123,6 +127,17 @@ public class Scene_DashboardExpense
 
         sideContainer.getChildren().addAll(teachersSalaryBox, staffsSalaryBox);
         HBox.setMargin(sideContainer, new Insets(0, 16, 24, 0));
+
+        StackPane stackPane = new StackPane();
+        stackPane.setPrefSize(84, 80);
+        stackPane.setLayoutX(30);
+        stackPane.setLayoutY(0);
+
+        comboBox = new ComboBox<>();
+        comboBox.setPrefWidth(150);
+        comboBox.setCursor(Cursor.HAND);
+
+        stackPane.getChildren().add(comboBox);
 
         topContainer.getChildren().addAll(lineChart, sideContainer);
         VBox.setMargin(topContainer, new Insets(16, 16, 0, 16));
@@ -211,24 +226,36 @@ public class Scene_DashboardExpense
         VBox.setMargin(bottomContainer, new Insets(0, 16, 16, 16));
 
         mainContainer.getChildren().addAll(topContainer, bottomContainer);
-        anchorPane.getChildren().add(mainContainer);
+        anchorPane.getChildren().addAll(mainContainer, stackPane);
     }
 
-    public void renderLineChart(ArrayList<List<String>> data, String dataName)
+    public void renderLineChart(ArrayList<List<String>> data1, ArrayList<List<String>> data2)
     {
-        yAxis.setLabel("Tổng lương");
-        XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
+        lineChart.getData().clear();
 
-        for (List<String> item : data)
+        yAxis.setLabel("Tổng lương");
+        XYChart.Series<String, Number> dataSeries1 = new XYChart.Series<>();
+
+        for (List<String> item : data1)
         {
-            dataSeries.getData().add(new XYChart.Data<>(item.getFirst(), Integer.parseInt(item.get(1))));
+            dataSeries1.getData().add(new XYChart.Data<>(item.getFirst(), Integer.parseInt(item.get(1))));
         }
-        dataSeries.setName(dataName);
-        lineChart.getData().add(dataSeries);
+        dataSeries1.setName("Giáo viên");
+        lineChart.getData().add(dataSeries1);
+
+        XYChart.Series<String, Number> dataSeries2 = new XYChart.Series<>();
+
+        for (List<String> item : data2)
+        {
+            dataSeries2.getData().add(new XYChart.Data<>(item.getFirst(), Integer.parseInt(item.get(1))));
+        }
+        dataSeries2.setName("Nhân viên");
+        lineChart.getData().add(dataSeries2);
     }
 
     public void renderBarChart(ArrayList<List<String>> data, String dataName)
     {
+        barChart.getData().clear();
         yAxis.setLabel("Số lượng");
         XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
 
@@ -238,7 +265,6 @@ public class Scene_DashboardExpense
         }
 
         dataSeries.setName(dataName);
-        barChart.getData().clear();
         barChart.getData().add(dataSeries);
     }
 
@@ -252,8 +278,21 @@ public class Scene_DashboardExpense
         totalExpenseValue.setText(Integer.toString(totalExpense));
     }
 
+    public void initYearsComboBox(List<Integer> years)
+    {
+        for (Integer year : years)
+        {
+            comboBox.getItems().add(year);
+        }
+    }
+
     public void addEventListener(EventHandler<Event> eventHandler)
     {
         uploadButton.setOnMouseClicked(eventHandler);
+    }
+
+    public void addOnActionListener(EventHandler<ActionEvent> eventHandler)
+    {
+        comboBox.setOnAction(eventHandler);
     }
 }

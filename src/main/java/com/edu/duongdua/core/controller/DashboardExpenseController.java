@@ -2,6 +2,7 @@ package com.edu.duongdua.core.controller;
 
 import com.edu.duongdua.core.model.Bill;
 import com.edu.duongdua.core.view.Scene_DashboardExpense;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -20,15 +21,17 @@ import java.util.List;
 
 public class DashboardExpenseController extends Controller implements EventHandler<Event>
 {
+    public int yearSelected;
     public Scene_DashboardExpense sceneDashboardExpense = new Scene_DashboardExpense();
     public DashboardExpenseController()
     {
         sceneDashboardExpense.addEventListener(this);
         sceneDashboardExpense.createScene();
-        sceneDashboardExpense.renderLineChart(getChartData(1), "Giáo viên");
-        sceneDashboardExpense.renderLineChart(getChartData(2), "Nhân viên");
-        sceneDashboardExpense.renderBarChart(getChartData(3), "Cơ sở vật chất");
         sceneDashboardExpense.initDataBox(getTotalExpenseByType(1), getTotalExpenseByType(2), getTotalExpenseByType(3));
+        sceneDashboardExpense.initYearsComboBox(getComboBoxYears());
+        sceneDashboardExpense.addOnActionListener(this::handleOnAction);
+
+        System.out.println(getTotalExpenseByType(2));
     }
     public String getCurrentTime()
     {
@@ -43,24 +46,27 @@ public class DashboardExpenseController extends Controller implements EventHandl
         return tmpTime;
     }
 
-    public ArrayList<List<String>> getChartData(int billType)
+    public ArrayList<List<String>> getChartData(int billType, int yearSelected)
     {
         ArrayList<List<String>> lineChartData = new ArrayList<>();
         List<String> tmpMonthList = new ArrayList<>();
         for(Bill billForMonth : billList){
             String month = billForMonth.getTime();
-            if(!tmpMonthList.contains(month) && billForMonth.getType() == billType){
-                tmpMonthList.add(month);
-                int totalSalary = 0;
-                List<String> data = new ArrayList<>();
-                for(Bill bill : billList){
-                    if(bill.getTime().equals(month) && bill.getType() == billType){
-                        totalSalary += bill.getTotal_price();
+            if (month.substring(3).equals(Integer.toString(yearSelected)))
+            {
+                if(!tmpMonthList.contains(month) && billForMonth.getType() == billType){
+                    tmpMonthList.add(month);
+                    int totalSalary = 0;
+                    List<String> data = new ArrayList<>();
+                    for(Bill bill : billList){
+                        if(bill.getTime().equals(month) && bill.getType() == billType){
+                            totalSalary += bill.getTotal_price();
+                        }
                     }
+                    data.add(month);
+                    data.add(Integer.toString(totalSalary));
+                    lineChartData.add(data);
                 }
-                data.add(month);
-                data.add(Integer.toString(totalSalary));
-                lineChartData.add(data);
             }
         }
         return lineChartData;
@@ -167,6 +173,25 @@ public class DashboardExpenseController extends Controller implements EventHandl
         return isAdded;
     }
 
+    public List<Integer> getComboBoxYears()
+    {
+        List<Integer> years = new ArrayList<>();
+        for (Bill bill : billDAO.getBillStatistical(2))
+        {
+            if (!years.contains(Integer.parseInt(bill.getTime().substring(3))))
+            {
+                years.add(Integer.parseInt(bill.getTime().substring(3)));
+            }
+        }
+        return years;
+    }
+
+    public void handleOnAction(ActionEvent event) {
+        yearSelected = sceneDashboardExpense.comboBox.getValue();
+        sceneDashboardExpense.renderLineChart(getChartData(1, yearSelected), getChartData(2, yearSelected));
+        sceneDashboardExpense.renderBarChart(getChartData(3, yearSelected), "Cơ sở vật chất");
+    }
+
     @Override
     public void handle(Event event) {
         String id = ((Node) event.getSource()).getId();
@@ -180,7 +205,7 @@ public class DashboardExpenseController extends Controller implements EventHandl
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setContentText("Thêm bill thành công!");
                     alert.show();
-                    sceneDashboardExpense.renderBarChart(getChartData(3), "Cơ sở vật chất");
+                    sceneDashboardExpense.renderBarChart(getChartData(3, yearSelected), "Cơ sở vật chất");
                     sceneDashboardExpense.initDataBox(getTotalExpenseByType(1), getTotalExpenseByType(2), getTotalExpenseByType(3));
                 } else
                 {
