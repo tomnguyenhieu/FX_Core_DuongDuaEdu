@@ -97,15 +97,12 @@ public class Scene_DashboardStudent {
         lineChartVbox.setPrefWidth(638);
         lineChartVbox.setPrefHeight(330);
 
-
-        // Hbox phía trên
         HBox hBox = new HBox(studentDataVbox(), lineChartVbox);
         hBox.setPrefWidth(972);
         hBox.setPrefHeight(340);
         hBox.setPadding(new Insets(10,10,10,10));
         hBox.setSpacing(5);
 
-        // Hbox phía dưới
         HBox hBox1 = new HBox(agePieChart, topStudentVbox(), classesDataVbox());
         hBox1.setPrefWidth(972);
         hBox1.setPrefHeight(340);

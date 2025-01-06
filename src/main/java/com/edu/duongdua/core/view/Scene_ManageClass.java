@@ -166,7 +166,6 @@ public class Scene_ManageClass
         modalStage.centerOnScreen();
         modalStage.show();
 
-        // Label
         Label label = new Label("Vui lòng nhập thông tin");
         label.setAlignment(Pos.CENTER);
         label.setPrefHeight(80);
@@ -175,13 +174,11 @@ public class Scene_ManageClass
         label.setTextFill(javafx.scene.paint.Color.web("#fffafa"));
         label.setFont(new Font("System Bold", 36));
 
-        // VBox for inputs
         VBox inputBox = new VBox();
         inputBox.setPrefHeight(133);
         inputBox.setPrefWidth(474);
         inputBox.setSpacing(10);
 
-        // TextField
         inputClass.setText(className);
         inputClass.setPrefHeight(65);
         inputClass.setPrefWidth(474);
@@ -190,7 +187,6 @@ public class Scene_ManageClass
         VBox.setMargin(inputClass, new Insets(0, 20, 0, 20));
         inputClass.setFont(new Font(18));
 
-        // ComboBox
         cbTeachersName.setPrefHeight(65);
         cbTeachersName.setPrefWidth(474);
         cbTeachersName.setPromptText("Tên giáo viên");
@@ -198,7 +194,6 @@ public class Scene_ManageClass
 
         inputBox.getChildren().addAll(inputClass, cbTeachersName);
 
-        // HBox for buttons
         HBox buttonBox = new HBox();
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         buttonBox.setPrefHeight(54);
@@ -206,7 +201,6 @@ public class Scene_ManageClass
         buttonBox.setSpacing(15);
         buttonBox.setPadding(new Insets(0, 20, 0, 20));
 
-        // Cancel Button
         Button cancelButton = new Button("Hủy");
         cancelButton.setPrefHeight(47);
         cancelButton.setPrefWidth(128);
@@ -218,7 +212,6 @@ public class Scene_ManageClass
             modalStage.close();
         });
 
-        // Confirm Button
         confirmButton.setId("confirmBtn");
         confirmButton.setPrefHeight(47);
         confirmButton.setPrefWidth(128);
@@ -234,19 +227,16 @@ public class Scene_ManageClass
 
     public void createExportModalStage()
     {
-        // Label
         Label headerLabel = new Label("Vui lòng chọn lớp");
         headerLabel.setPrefSize(474, 80);
         headerLabel.setStyle("-fx-background-color: #CE4848; -fx-text-fill: #fffafa;");
         headerLabel.setFont(Font.font("System Bold", 36));
         headerLabel.setAlignment(Pos.CENTER);
 
-        // ComboBox
         cbClasses.setPrefSize(474, 65);
         cbClasses.setPromptText("Lớp");
         VBox.setMargin(cbClasses, new Insets(0, 20, 0, 20));
 
-        // Buttons
         Button btnCancel = new Button("Hủy");
         btnCancel.setCursor(Cursor.HAND);
         btnCancel.setPrefSize(128, 47);
@@ -264,18 +254,15 @@ public class Scene_ManageClass
         btnConfirm.setTextFill(javafx.scene.paint.Color.WHITE);
         btnConfirm.setFont(Font.font(20));
 
-        // HBox
         HBox buttonContainer = new HBox(15, btnCancel, btnConfirm);
         buttonContainer.setAlignment(Pos.CENTER_RIGHT);
         buttonContainer.setPrefSize(474, 54);
         buttonContainer.setPadding(new Insets(0, 20, 0, 20));
 
-        // VBox
         VBox root = new VBox(20, headerLabel, cbClasses, buttonContainer);
         root.setPrefSize(474, 250);
         root.setStyle("-fx-background-color: #FFFFFF;");
 
-        // Scene
         Scene scene = new Scene(root);
         modalStage.setScene(scene);
         modalStage.setTitle("Export Form Excel");
@@ -291,14 +278,12 @@ public class Scene_ManageClass
         className.setFont(Font.font("System Bold", 36));
         className.setAlignment(Pos.CENTER);
 
-        // Label for teacher name
         Label teacherName = new Label("Giáo viên: " + strTeacherName);
         teacherName.setPrefSize(472, 76);
         teacherName.setStyle("-fx-background-color: #ffffff;");
         teacherName.setFont(Font.font(20));
         teacherName.setPadding(new Insets(0, 0, 0, 16));
 
-        // TableView for students
         studentTable.setPrefSize(200, 200);
         studentTable.setFixedCellSize(35);
         nameCol.setPrefWidth(360);
@@ -306,12 +291,10 @@ public class Scene_ManageClass
         studentTable.getColumns().clear();
         studentTable.getColumns().addAll(nameCol, ageCol);
 
-        // VBox to hold teacherName and tblStudents
         VBox vboxContent = new VBox(20, teacherName, studentTable);
         vboxContent.setPrefSize(472, 286);
         VBox.setMargin(vboxContent, new Insets(0, 16, 0, 16));
 
-        // Button to close
         Button btnClose = new Button("Đóng");
         btnClose.setPrefSize(128, 47);
         btnClose.setStyle("-fx-background-color: #30475E; -fx-background-radius: 10px;");
@@ -323,7 +306,6 @@ public class Scene_ManageClass
         });
         VBox.setMargin(btnClose, new Insets(0, 16, 0, 0));
 
-        // Main VBox layout
         VBox root = new VBox(12, className, vboxContent, btnClose);
         root.setPrefSize(504, 453);
         root.setAlignment(Pos.TOP_RIGHT);

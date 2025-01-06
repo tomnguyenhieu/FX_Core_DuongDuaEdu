@@ -141,7 +141,6 @@ public class Scene_ManageEmployee {
         label.setPrefWidth(672);
         label.setPrefHeight(84);
 
-
         Label label1 = new Label("Sửa ");
         label1.setFont(Font.font("System", FontWeight.NORMAL, 22));
         label1.setTextFill(Color.WHITE);
@@ -200,7 +199,6 @@ public class Scene_ManageEmployee {
         FontIcon addIcon = new FontIcon("fas-user-plus");
         addIcon.setIconSize(28);
         addIcon.setIconColor(Color.WHITE);
-
 
         addHbox.setId("Add");
         addHbox.getChildren().add(addIcon);
@@ -301,7 +299,6 @@ public class Scene_ManageEmployee {
         salaryCol.setPrefWidth(70);
         statusCol.setPrefWidth(70);
 
-
         dateCollum.setPrefWidth(90);
         priceCollum.setPrefWidth(120);
         statusCollum.setPrefWidth(120);
@@ -322,7 +319,6 @@ public class Scene_ManageEmployee {
         root.setPadding(new Insets(25,20,0,20));
         root.setSpacing(20);
 
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -331,7 +327,6 @@ public class Scene_ManageEmployee {
         stage.show();
 
         VBox vBox = new VBox();
-
         HBox hBox = new HBox();
         hBox.setPrefWidth(820);
         hBox.setPrefHeight(75);
@@ -406,7 +401,6 @@ public class Scene_ManageEmployee {
         phoneTextField.setPrefHeight(62);
         vBox6.getChildren().addAll(label5, phoneTextField);
         vBox6.setPadding(new Insets(0,15,0,0));
-
 
         Label label6 = new Label("Địa chỉ");
         label6.setFont(Font.font("System", FontWeight.NORMAL, 20));

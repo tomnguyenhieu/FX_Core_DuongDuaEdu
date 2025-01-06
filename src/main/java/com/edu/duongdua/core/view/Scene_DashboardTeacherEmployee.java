@@ -64,23 +64,18 @@ public class Scene_DashboardTeacherEmployee
     {
         anchorPane = new AnchorPane();
 
-        // Main layout
         VBox mainVBox = new VBox();
         mainVBox.setPrefSize(1000, 720);
         mainVBox.setStyle("-fx-padding: 20; -fx-spacing: 16;");
 
-        // Upper section
         HBox upperHBox = new HBox(8);
         upperHBox.setPrefSize(1000, 370);
 
-        // Line chart
         lineChart.setPrefSize(700, 370);
 
-        // Right VBox
         VBox rightVBox = new VBox(12);
         rightVBox.setPrefSize(300, 330);
 
-        // Teacher Stats Box
         VBox teacherStatsBox = new VBox();
         teacherStatsBox.setStyle("-fx-background-color: #30475E; -fx-background-radius: 12; -fx-padding: 16;");
         teacherStatsBox.setPrefSize(300, 185);
@@ -113,7 +108,6 @@ public class Scene_DashboardTeacherEmployee
         teacherDetails.getChildren().addAll(teacherTotalBox, teacherAverageBox);
         teacherStatsBox.getChildren().addAll(teacherTitle, teacherDetails);
 
-        // Staff Stats Box
         VBox staffStatsBox = new VBox();
         staffStatsBox.setStyle("-fx-background-color: #30475E; -fx-background-radius: 12; -fx-padding: 16;");
         staffStatsBox.setPrefSize(300, 185);
@@ -151,7 +145,6 @@ public class Scene_DashboardTeacherEmployee
 
         upperHBox.getChildren().addAll(lineChart, rightVBox);
 
-        // Lower section
         HBox lowerHBox = new HBox();
         lowerHBox.setPrefSize(1000, 350);
         lowerHBox.setStyle("-fx-spacing: 20;");
@@ -183,7 +176,7 @@ public class Scene_DashboardTeacherEmployee
     {
         lineChart.getData().clear();
         yAxis.setLabel("Số lượng");
-        // Giáo viên
+
         XYChart.Series<String, Number> dataSeriesTeachers = new XYChart.Series<>();
         for (Bill bill : teacherStatistical)
         {
@@ -192,7 +185,6 @@ public class Scene_DashboardTeacherEmployee
         dataSeriesTeachers.setName("Giáo viên");
         lineChart.getData().add(dataSeriesTeachers);
 
-        // Nhân viên
         XYChart.Series<String, Number> dataSeriesEmployees = new XYChart.Series<>();
         for (Bill bill : employeeStatistical)
         {
@@ -245,6 +237,7 @@ public class Scene_DashboardTeacherEmployee
     {
         barChart.getData().clear();
         XYChart.Series<String, Number> dataSeriesLessons = new XYChart.Series<>();
+        dataSeriesLessons.setName("Các tiết học");
         if (!lessonsList.isEmpty())
         {
             for (Bill bill : lessonsList)

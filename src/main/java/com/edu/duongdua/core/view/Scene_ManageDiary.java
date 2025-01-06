@@ -72,7 +72,6 @@ public class Scene_ManageDiary
         mainContainer.setPrefSize(1000, 720);
         mainContainer.setStyle("-fx-background-color: #ffffff;");
 
-        // Header Section
         HBox header = new HBox(16);
         header.setPrefSize(1000, 120);
         header.setAlignment(Pos.BOTTOM_CENTER);
@@ -98,13 +97,11 @@ public class Scene_ManageDiary
         header.getChildren().addAll(headerLabel, uploadButton);
         mainContainer.getChildren().add(header);
 
-        // Content Section
         HBox content = new HBox();
         content.setPrefSize(1000, 600);
         content.setPadding(new Insets(0, 16, 16, 16));
         content.setSpacing(16);
 
-        // Lessons ScrollPane
         ScrollPane lessonsScrollPane = new ScrollPane();
         lessonsScrollPane.setPrefSize(370, 600);
         lessonsScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -116,7 +113,6 @@ public class Scene_ManageDiary
         lessonsScrollPane.setContent(lessonsContainer);
         content.getChildren().add(lessonsScrollPane);
 
-        // Tables Section
         VBox tablesContainer = new VBox(16);
         tablesContainer.setPrefSize(720, 600);
 
@@ -135,7 +131,6 @@ public class Scene_ManageDiary
         content.getChildren().add(tablesContainer);
         mainContainer.getChildren().add(content);
 
-        // Export Button
         StackPane exportButtonContainer = new StackPane();
         exportButtonContainer.setPrefSize(100, 100);
         exportButtonContainer.setLayoutX(850);
@@ -163,7 +158,6 @@ public class Scene_ManageDiary
         nameLabel.setWrapText(true);
         nameLabel.setFont(new Font(20));
 
-        // Cancel Button
         Button cancelButton = new Button("Hủy");
         cancelButton.setPrefSize(128, 47);
         cancelButton.setStyle("-fx-background-color: #30475E; -fx-background-radius: 10px;");
@@ -174,7 +168,6 @@ public class Scene_ManageDiary
             modalStage.close();
         });
 
-        // Confirm Button
         confirmButton.setId("confirmBtn");
         confirmButton.setPrefSize(128, 47);
         confirmButton.setStyle("-fx-background-color: #30475E; -fx-background-radius: 10px;");
@@ -182,13 +175,11 @@ public class Scene_ManageDiary
         confirmButton.setFont(new Font(20));
         confirmButton.setCursor(Cursor.HAND);
 
-        // HBox for buttons
         HBox buttonBox = new HBox(15, cancelButton, confirmButton);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         buttonBox.setPrefSize(474, 54);
         buttonBox.setPadding(new Insets(0, 0, 0, 20));
 
-        // VBox container
         VBox root = new VBox(40, nameLabel, buttonBox);
         root.setPrefSize(423, 208);
         root.setPadding(new Insets(16));
