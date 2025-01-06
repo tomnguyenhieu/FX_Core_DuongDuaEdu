@@ -27,6 +27,10 @@ public class DashboardTeacherEmployeeController extends Controller implements Ev
     {
         sceneDashboardTeacherEmployee.addActionListener(this);
         sceneDashboardTeacherEmployee.initYearsComboBox(getComboBoxYears());
+        selectedValue = 2025;
+        sceneDashboardTeacherEmployee.yearComboBox.setValue(selectedValue);
+        sceneDashboardTeacherEmployee.renderLineChart(getStatistcal(2, selectedValue), getStatistcal(3, selectedValue));
+        sceneDashboardTeacherEmployee.renderTeachersTable(getTeachers());
         sceneDashboardTeacherEmployee.initBoxData(getStatistcal(2, sceneDashboardTeacherEmployee.currentYear), getStatistcal(3, sceneDashboardTeacherEmployee.currentYear));
         sceneDashboardTeacherEmployee.addOnActionListener(this::handleOnAction);
     }

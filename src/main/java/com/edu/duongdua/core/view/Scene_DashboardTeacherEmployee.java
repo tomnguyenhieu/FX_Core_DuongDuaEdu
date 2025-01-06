@@ -187,7 +187,7 @@ public class Scene_DashboardTeacherEmployee
         XYChart.Series<String, Number> dataSeriesTeachers = new XYChart.Series<>();
         for (Bill bill : teacherStatistical)
         {
-            dataSeriesTeachers.getData().add(new XYChart.Data<>(bill.getTime(), bill.getCountMembers()));
+            dataSeriesTeachers.getData().add(new XYChart.Data<>(bill.getTime().substring(0, 2), bill.getCountMembers()));
         }
         dataSeriesTeachers.setName("Giáo viên");
         lineChart.getData().add(dataSeriesTeachers);
@@ -196,7 +196,7 @@ public class Scene_DashboardTeacherEmployee
         XYChart.Series<String, Number> dataSeriesEmployees = new XYChart.Series<>();
         for (Bill bill : employeeStatistical)
         {
-            dataSeriesEmployees.getData().add(new XYChart.Data<>(bill.getTime(), bill.getCountMembers()));
+            dataSeriesEmployees.getData().add(new XYChart.Data<>(bill.getTime().substring(0, 2), bill.getCountMembers()));
         }
         dataSeriesEmployees.setName("Nhân viên");
         lineChart.getData().add(dataSeriesEmployees);
@@ -249,7 +249,7 @@ public class Scene_DashboardTeacherEmployee
         {
             for (Bill bill : lessonsList)
             {
-                dataSeriesLessons.getData().add(new XYChart.Data<>(bill.getTime(), bill.getLessonQty()));
+                dataSeriesLessons.getData().add(new XYChart.Data<>(bill.getTime().substring(0, 2), bill.getLessonQty()));
             }
             barChart.getData().add(dataSeriesLessons);
         } else

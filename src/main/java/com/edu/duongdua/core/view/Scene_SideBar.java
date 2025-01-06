@@ -1,9 +1,6 @@
 package com.edu.duongdua.core.view;
 
-import com.edu.duongdua.core.controller.DashboardStudentController;
-import com.edu.duongdua.core.controller.ManageClassController;
-import com.edu.duongdua.core.controller.ManageEmployeeController;
-import com.edu.duongdua.core.controller.ManageStudentController;
+import com.edu.duongdua.core.controller.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -25,8 +22,10 @@ public class Scene_SideBar {
     VBox menuContainer = new VBox(20);
     VBox content = new VBox(12);
 
+    public DashboardTeacherEmployeeController dashboardTeacherEmployeeController = new DashboardTeacherEmployeeController();
     public Scene_SideBar(BorderPane mainLayout) {
         this.mainLayout = mainLayout;
+        mainLayout.setCenter(dashboardTeacherEmployeeController.sceneDashboardTeacherEmployee.getAnchorPane());
     }
 
     public VBox createSideBar() {
@@ -50,7 +49,7 @@ public class Scene_SideBar {
         imageView.setFitWidth(75);
         imageView.setFitHeight(75);
 
-        Label label = new Label("Germ \nEducation");
+        Label label = new Label("Germ Education");
         label.setPrefSize(140, 75);
         label.setTextFill(Color.WHITE);
         label.setFont(Font.font("Roboto Bold", FontWeight.BOLD, 28));
@@ -94,7 +93,7 @@ public class Scene_SideBar {
                 createSubMenuItem("Giáo viên & Nhân viên", "TeacherEmployeeDashboard"),
                 createSubMenuItem("Học viên", "StudentDashboard"),
                 createSubMenuItem("Khoản thu", "EarningDashboard"),
-                createSubMenuItem("Khoản chi", "ExpenseDashboad")
+                createSubMenuItem("Khoản chi", "ExpenseDashboard")
         );
 
         titledPaneItem.setContent(content);
@@ -146,12 +145,14 @@ public class Scene_SideBar {
                 case "TeacherScene":
                     resetAllButtonStyle();
                     menuItem.setStyle("-fx-background-color: #F05454; -fx-background-radius: 5px;");
-
+                    ManageTeacherController manageTeacherController = new ManageTeacherController();
+                    mainLayout.setCenter(manageTeacherController.sceneManageTeacher.getAnchorPane());
                     break;
                 case "TeacherEmployeeDashboard":
                     resetAllButtonStyle();
                     menuItem.setStyle("-fx-background-color: #F05454; -fx-background-radius: 5px;");
-
+                    DashboardTeacherEmployeeController dashboardTeacherEmployeeController = new DashboardTeacherEmployeeController();
+                    mainLayout.setCenter(dashboardTeacherEmployeeController.sceneDashboardTeacherEmployee.getAnchorPane());
                     break;
                 case "StudentDashboard":
                     resetAllButtonStyle();
@@ -162,12 +163,14 @@ public class Scene_SideBar {
                 case "EarningDashboard":
                     resetAllButtonStyle();
                     menuItem.setStyle("-fx-background-color: #F05454; -fx-background-radius: 5px;");
-
+                    DashboardEarningController dashboardEarningController = new DashboardEarningController();
+                    mainLayout.setCenter(dashboardEarningController.sceneDashboardEarning.getAnchorPane());
                     break;
-                case "ExpenseDashboad":
+                case "ExpenseDashboard":
                     resetAllButtonStyle();
                     menuItem.setStyle("-fx-background-color: #F05454; -fx-background-radius: 5px;");
-
+                    DashboardExpenseController dashboardExpenseController = new DashboardExpenseController();
+                    mainLayout.setCenter(dashboardExpenseController.sceneDashboardExpense.getAnchorPane());
                     break;
             }
         });
@@ -180,6 +183,7 @@ public class Scene_SideBar {
 
     private HBox createUserSection() {
         HBox userSection = new HBox(16);
+        userSection.setAlignment(Pos.CENTER_LEFT);
         userSection.setLayoutX(10);
         userSection.setLayoutY(10);
         userSection.setPrefSize(280, 86);
