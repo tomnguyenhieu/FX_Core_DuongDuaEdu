@@ -88,17 +88,14 @@ public class Scene_DashboardStudent {
         label.setFont(Font.font("System", FontWeight.NORMAL, 20));
 
         yearComboBox.setPrefSize(120, 50);
-//        yearComboBox.setStyle("-fx-background-color: #30475E;");
 
         HBox yearChartHbox = new HBox(label, yearComboBox);
         yearChartHbox.setAlignment(Pos.CENTER);
         yearChartHbox.setPadding(new Insets(0,0,0,20));
-//        yearChartHbox.setSpacing(60);
 
         VBox lineChartVbox = new VBox(yearChartHbox, totalStudentLineChart);
         lineChartVbox.setPrefWidth(638);
         lineChartVbox.setPrefHeight(330);
-//        lineChartVbox.setPadding(new Insets(0,0,0,0));
 
 
         // Hbox phía trên

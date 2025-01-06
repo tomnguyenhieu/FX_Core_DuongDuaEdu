@@ -88,11 +88,13 @@ public class DashboardStudentController extends Controller {
         int femaleCount = 0;
         List<Account> studentList = accountDAO.getAllAccountByRole(4);
         for(Account student : studentList){
-            if(student.getGender().equals("Nam")){
-                // Nếu học sinh là nam
-                maleCount++;
-            }else{
-                femaleCount++;
+            if(student.getStatus().equals("Đang hoạt động")){
+                if(student.getGender().equals("Nam")){
+                    // Nếu học sinh là nam
+                    maleCount++;
+                }else{
+                    femaleCount++;
+                }
             }
         }
         sceneDashboardStudent.setMaleStudent(maleCount);
@@ -101,24 +103,17 @@ public class DashboardStudentController extends Controller {
 
     public List<List<Integer>> countTotalStudentByYear(String year){
         List<List<Integer>> dataList = new ArrayList<>();
-        List<String> monthArr = new ArrayList<>();
+        List<String> allMonth = new ArrayList<>(); // lưu trữ để kiểm tra tháng đã đếm hay chưa
 
         for(Lesson lesson : lessonList){
+            // Lấy lesson của năm đó
             if(lesson.getTitle().substring(6).equals(year)){
-                List<Integer> monthList = new ArrayList<>();
-                String month = lesson.getTitle().substring(3,5);
-                int totalStudent = 0;
-                List<Integer> studentIdList = new ArrayList<>();
-                for(Comment comment : commentList){
-                    int studentId = comment.getStudentId();
-                    if(comment.getLessonId() == lesson.getId() && !studentIdList.contains(studentId)){
-                        totalStudent++;
-                        studentIdList.add(studentId);
-                    }
-                }
-                if(!monthArr.contains(month)){
-                    // Chưa có tháng của lesson hiện tại
-                    monthArr.add(lesson.getTitle().substring(3,5));
+                List<Integer> monthList = new ArrayList<>(); // lưu trữ tháng và số học sinh tháng đó
+                String month = lesson.getTitle().substring(3,5); // Lấy tháng
+                int totalStudent = countStudent(month + "/" + year); // Cộng tổng học sinh tháng/năm đó
+                if(!allMonth.contains(month)){
+                    // Chưa có tháng vừa xử lí
+                    allMonth.add(lesson.getTitle().substring(3,5));
                     monthList.add(Integer.parseInt(month));
                     monthList.add(totalStudent);
                     dataList.add(monthList);
@@ -126,11 +121,10 @@ public class DashboardStudentController extends Controller {
             }
         }
 
+        // Insertion sort
         for(int i = 1; i < dataList.size(); i++){
-            // Insertion sort
             List<Integer> key = dataList.get(i);
             int j = i-1;
-
             while(j >= 0 && dataList.get(j).getFirst() > key.getFirst()){
                 dataList.set(j+1, dataList.get(j));
                 j = j - 1;
@@ -140,11 +134,27 @@ public class DashboardStudentController extends Controller {
         return dataList;
     }
 
+    public int countStudent(String date){
+        int totalStudent = 0;
+        for(Lesson lesson : lessonList){
+            if(lesson.getTitle().substring(3).equals(date)){
+                List<Integer> studentIdList = new ArrayList<>(); // Lưu id học sinh để không đếm lại
+                for(Comment comment : commentList){
+                    int studentId = comment.getStudentId();
+                    if(comment.getLessonId() == lesson.getId() && !studentIdList.contains(studentId)){
+                        totalStudent++;
+                        studentIdList.add(studentId);
+                    }
+                }
+            }
+        }
+        return totalStudent;
+    }
+
     public void sortTopStudent(){
         String latestMonth = lessonList.getLast().getTitle().substring(3);
         List<Account> topStudentInMonth = new ArrayList<Account>();
-        // Lưu điểm tương ứng với top
-        int[] topStudentScore = new int[commentList.size() + 1];
+        int[] topStudentScore = new int[commentList.size() + 1]; // Lưu điểm tương ứng với top
         int top = 1;
 
         // Sắp xếp list comment theo điểm
@@ -209,7 +219,7 @@ public class DashboardStudentController extends Controller {
 
     public void handleOnAction(ActionEvent event){
         String year = sceneDashboardStudent.yearComboBox.getValue().toString();
-        sceneDashboardStudent.refreshLineChart(countTotalStudentByYear(year));
         System.out.println(year);
+        sceneDashboardStudent.refreshLineChart(countTotalStudentByYear(year));
     }
 }
