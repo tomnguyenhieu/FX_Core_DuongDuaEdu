@@ -1,5 +1,6 @@
 package com.edu.duongdua.core;
 
+import com.edu.duongdua.core.controller.LoginController;
 import com.edu.duongdua.core.view.Scene_SideBar;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -11,6 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -28,9 +30,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BorderPane root = new BorderPane();
-        Scene_SideBar sceneSideBar = new Scene_SideBar(root);
-        root.setLeft(sceneSideBar.createSideBar());
+        AnchorPane root = new AnchorPane();
+        LoginController loginController = new LoginController(root, primaryStage);
 
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);
