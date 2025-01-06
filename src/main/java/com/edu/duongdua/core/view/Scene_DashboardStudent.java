@@ -453,19 +453,25 @@ public class Scene_DashboardStudent {
         agePieChart.setTitle("Tỉ lệ tuổi học viên");
         agePieChart.setPrefHeight(300);
         agePieChart.setPrefWidth(324);
-
         PieChart.Data ageUnder12CountData = new PieChart.Data("Dưới 12 tuổi",ageUnder12Count);
         PieChart.Data ageUnder22CountData = new PieChart.Data("Dưới 22 tuổi",ageUnder22Count);
         PieChart.Data ageOver22CountData = new PieChart.Data("Trên 22 tuổi",ageOver22Count);
         agePieChart.getData().clear();
-        agePieChart.getData().addAll(ageUnder12CountData, ageUnder22CountData, ageOver22CountData);
+        if(ageUnder12Count != 0){
+            agePieChart.getData().add(ageUnder12CountData);
+        }
+        if(ageUnder22Count != 0){
+            agePieChart.getData().add(ageUnder22CountData);
+        }
+        if (ageOver22Count != 0){
+            agePieChart.getData().add(ageOver22CountData);
+        }
         agePieChart.setLabelsVisible(true);
         agePieChart.setLabelLineLength(1);
         agePieChart.setLegendVisible(false);
         agePieChart.setStartAngle(0);
-        agePieChart.getData().get(0).getNode().setStyle("-fx-background-color: #F05454;");
-        agePieChart.getData().get(1).getNode().setStyle("-fx-background-color: #8A3030;");
-        agePieChart.getData().get(2).getNode().setStyle("-fx-background-color: #30475E;");
+        agePieChart.getData().getFirst().getNode().setStyle("-fx-background-color: #F05454;");
+        agePieChart.getData().getLast().getNode().setStyle("-fx-background-color: #30475E;");
     }
 
     public void setUpStudentData(){
