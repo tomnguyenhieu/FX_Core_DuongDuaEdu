@@ -129,9 +129,9 @@ public class Scene_DashboardExpense
         HBox.setMargin(sideContainer, new Insets(0, 16, 24, 0));
 
         StackPane stackPane = new StackPane();
-        stackPane.setPrefSize(84, 80);
+        stackPane.setPrefSize(84, 40);
         stackPane.setLayoutX(30);
-        stackPane.setLayoutY(0);
+        stackPane.setLayoutY(10);
 
         comboBox = new ComboBox<>();
         comboBox.setPrefWidth(150);

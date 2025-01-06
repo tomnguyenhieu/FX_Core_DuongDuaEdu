@@ -30,8 +30,10 @@ public class DashboardExpenseController extends Controller implements EventHandl
         sceneDashboardExpense.initDataBox(getTotalExpenseByType(1), getTotalExpenseByType(2), getTotalExpenseByType(3));
         sceneDashboardExpense.initYearsComboBox(getComboBoxYears());
         sceneDashboardExpense.addOnActionListener(this::handleOnAction);
-
-        System.out.println(getTotalExpenseByType(2));
+        yearSelected = sceneDashboardExpense.currentYear;
+        sceneDashboardExpense.comboBox.setValue(yearSelected);
+        sceneDashboardExpense.renderLineChart(getChartData(1, yearSelected), getChartData(2, yearSelected));
+        sceneDashboardExpense.renderBarChart(getChartData(3, yearSelected), "Cơ sở vật chất");
     }
     public String getCurrentTime()
     {
@@ -63,7 +65,7 @@ public class DashboardExpenseController extends Controller implements EventHandl
                             totalSalary += bill.getTotal_price();
                         }
                     }
-                    data.add(month);
+                    data.add(month.substring(0, 2));
                     data.add(Integer.toString(totalSalary));
                     lineChartData.add(data);
                 }

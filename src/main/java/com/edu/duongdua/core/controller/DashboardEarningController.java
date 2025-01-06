@@ -23,7 +23,11 @@ public class DashboardEarningController extends Controller {
     public DashboardEarningController () {
         sceneDashboardEarning.onActionListener(this::handleOnAction);
         sceneDashboardEarning.initYearCB(getListYear());
-
+        yearSelected = sceneDashboardEarning.currentYear;
+        sceneDashboardEarning.selectYearCB.setValue(yearSelected);
+        sceneDashboardEarning.renderBarChart(getEarningByMonth());
+        calculateLabelData();
+        sceneDashboardEarning.renderLabel(totalEarningByYear, avgMonthlyEarning, totalInterset, increase);
     }
 
     public List<Integer> getListYear () {

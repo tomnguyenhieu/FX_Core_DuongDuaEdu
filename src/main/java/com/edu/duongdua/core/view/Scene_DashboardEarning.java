@@ -17,10 +17,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
 public class Scene_DashboardEarning {
+    private LocalDate today = LocalDate.now();
+    public Integer currentMonth = today.getMonthValue();
+    public Integer currentYear = today.getYear();
+    public String time = currentMonth.toString() + "/" + currentYear.toString();
     public ComboBox<Integer> selectYearCB;
     public BarChart<String, Number> earningByYearChart;
     NumberAxis yAxis = new NumberAxis();
@@ -54,12 +59,9 @@ public class Scene_DashboardEarning {
         topContainer.setPrefSize(200, 100);
 
         selectYearCB = new ComboBox<>();
-        selectYearCB.setPrefSize(150, 50);
+        selectYearCB.setPrefSize(100, 24);
 
-        Label yearLabel = new Label("Chọn năm");
-        yearLabel.setFont(new Font(21));
-
-        topContainer.getChildren().addAll(selectYearCB, yearLabel);
+        topContainer.getChildren().addAll(selectYearCB);
 
         // BarChart
         earningByYearChart = new BarChart<>(xAxis, yAxis);
