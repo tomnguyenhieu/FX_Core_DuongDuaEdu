@@ -24,8 +24,8 @@ public class DashboardStudentController extends Controller {
 
     public List<String> getYears(){
         List<String> yearList = new ArrayList<>();
-        for(Lesson lesson : lessonList){
-            String year = lesson.getTitle().substring(6);
+        for(Bill bill : billList){
+            String year = bill.getTime().substring(3);
             if(!yearList.contains(year)){
                 yearList.add(year);
             }

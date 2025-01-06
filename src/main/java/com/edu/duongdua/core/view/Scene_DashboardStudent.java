@@ -316,7 +316,9 @@ public class Scene_DashboardStudent {
 
         VBox vBox = new VBox();
         vBox.setPrefHeight(68);
+        vBox.setMinHeight(68);
         vBox.setPrefWidth(250);
+        vBox.setMaxWidth(250);
         vBox.setPadding(new Insets(0,0,0,15));
         vBox.setStyle("-fx-background-color:  #FFFFFF; -fx-background-radius: 12;");
         vBox.setEffect(ds);
