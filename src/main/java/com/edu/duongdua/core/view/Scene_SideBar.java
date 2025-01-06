@@ -49,7 +49,7 @@ public class Scene_SideBar {
         imageView.setFitWidth(75);
         imageView.setFitHeight(75);
 
-        Label label = new Label("Germ Education");
+        Label label = new Label("Germ \nEducation");
         label.setPrefSize(140, 75);
         label.setTextFill(Color.WHITE);
         label.setFont(Font.font("Roboto Bold", FontWeight.BOLD, 28));
@@ -140,7 +140,8 @@ public class Scene_SideBar {
                 case "ScheduleScene":
                     resetAllButtonStyle();
                     menuItem.setStyle("-fx-background-color: #F05454; -fx-background-radius: 5px;");
-
+                    ManageScheduleController manageScheduleController = new ManageScheduleController();
+                    mainLayout.setCenter(manageScheduleController.manageScheduleView.getAnchorPane());
                     break;
                 case "TeacherScene":
                     resetAllButtonStyle();

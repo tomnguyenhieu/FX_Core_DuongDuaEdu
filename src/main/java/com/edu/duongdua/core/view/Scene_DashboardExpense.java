@@ -77,7 +77,7 @@ public class Scene_DashboardExpense
         teachersSalaryBox.setPadding(new Insets(2, 16, 2, 24));
 
         HBox teachersSalaryHeader = new HBox();
-        Label teachersSalaryLabel = new Label("Lương giáo viên");
+        Label teachersSalaryLabel = new Label("Lương \ngiáo viên");
         teachersSalaryLabel.setPrefSize(128, 100);
         teachersSalaryLabel.setWrapText(true);
         teachersSalaryLabel.setTextFill(javafx.scene.paint.Color.WHITE);

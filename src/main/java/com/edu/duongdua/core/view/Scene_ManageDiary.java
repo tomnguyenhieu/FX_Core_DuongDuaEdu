@@ -18,7 +18,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -76,11 +78,12 @@ public class Scene_ManageDiary
         header.setAlignment(Pos.BOTTOM_CENTER);
         header.setPadding(new Insets(0, 16, 16, 16));
 
-        Label headerLabel = new Label("Bảng nhận xét");
+        Label headerLabel = new Label("BẢNG NHẬN XÉT");
         headerLabel.setPrefSize(700, 84);
-        headerLabel.setStyle("-fx-background-color: #F5F5F5; -fx-text-fill: #30475e;");
-        headerLabel.setFont(new javafx.scene.text.Font("Roboto Bold", 43));
+        headerLabel.setFont(Font.font("System", FontWeight.BOLD, 42));
+        headerLabel.setTextFill(Paint.valueOf("#30475e"));
         headerLabel.setAlignment(Pos.CENTER);
+        headerLabel.setStyle("-fx-background-color: #F5F5F5;");
 
         uploadButton.setText("Đăng tải nhật kí");
         uploadButton.setId("uploadBtn");

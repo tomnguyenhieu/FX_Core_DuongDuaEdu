@@ -242,14 +242,14 @@ public class Scene_ManageTeacher {
         billTable.setPrefWidth(600);
         billTable.setPrefHeight(198);
         billTable.setFixedCellSize(35);
-        billTable.getColumns().addAll(billIdCol, teacherIdCol, dateCol, lessonCountCol,monthlySalaryCol, billStatusCol, updateCol);
+        billTable.getColumns().addAll(dateCol, lessonCountCol,monthlySalaryCol, billStatusCol, updateCol);
 
         DropShadow ds = new DropShadow();
         ds.setBlurType(BlurType.THREE_PASS_BOX);
         ds.setWidth(8);
         ds.setHeight(8);
         ds.setRadius(3.5);
-        billStackPane.setPrefWidth(600);
+        billStackPane.setPrefWidth(500);
         billStackPane.setPrefHeight(198);
         billStackPane.setAlignment(Pos.CENTER);
         billStackPane.getChildren().add(billTable);

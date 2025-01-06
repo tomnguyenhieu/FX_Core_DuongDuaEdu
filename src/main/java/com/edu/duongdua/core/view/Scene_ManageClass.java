@@ -2,6 +2,7 @@ package com.edu.duongdua.core.view;
 
 import com.edu.duongdua.core.Main;
 import com.edu.duongdua.core.controller.ManageClassController;
+import com.edu.duongdua.core.controller.ManageDiaryController;
 import com.edu.duongdua.core.model.Account;
 import com.edu.duongdua.core.model.Classes;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
@@ -93,12 +95,12 @@ public class Scene_ManageClass
         hbox.setSpacing(16);
         hbox.setAlignment(Pos.BOTTOM_CENTER);
 
-        Label label = new Label("Danh sách các lớp học");
+        Label label = new Label("DANH SÁCH CÁC LỚP HỌC");
         label.setPrefSize(700, 84);
-        label.setStyle("-fx-background-color:  #F5F5F5");
-        label.setFont(Font.font("Roboto", FontWeight.BOLD, 43));
-        label.setTextFill(Color.BLACK);
+        label.setFont(Font.font("System", FontWeight.BOLD, 42));
+        label.setTextFill(Paint.valueOf("#30475e"));
         label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-background-color: #F5F5F5;");
 
         addClassBtn = new Button("Thêm lớp");
         addClassBtn.setId("addClassBtn");
@@ -347,11 +349,8 @@ public class Scene_ManageClass
         classNameLabel.setFont(new Font("Roboto", 24));
         classNameLabel.setTextFill(Color.WHITE);
         classNameLabel.setAlignment(Pos.CENTER);
-        if (classObj.getClassDeleted() == 1)
-        {
-            classNameLabel.setCursor(Cursor.HAND);
-            classNameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-        }
+        classNameLabel.setCursor(Cursor.HAND);
+        classNameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
         classNameLabel.setStyle("-fx-font-weight: bold; -fx-background-color:  #F05454; -fx-background-radius: 8 8 0 0");
 
         HBox hbox = new HBox();
@@ -452,6 +451,7 @@ public class Scene_ManageClass
 
     public void initComboBoxTeachersName(List<Account> accountList)
     {
+        cbTeachersName.getItems().clear();
         for (Account teacher : accountList)
         {
             cbTeachersName.getItems().add(teacher.getName());
@@ -460,6 +460,7 @@ public class Scene_ManageClass
 
     public void initClassesComboBox(List<Classes> classesList)
     {
+        cbClasses.getItems().clear();
         for (Classes _class : classesList)
         {
             cbClasses.getItems().add(_class.getClassName());
