@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -43,7 +42,7 @@ public class ManageClassController extends Controller implements EventHandler<Ev
     private Integer currentDay = today.getDayOfMonth();
     private Integer currentMonth = today.getMonthValue();
     private Integer currentYear = today.getYear();
-    private String time = currentDay.toString() + "/" + currentMonth.toString() + "/" + currentYear.toString();
+    private String time = "0" + currentDay.toString() + "/0" + currentMonth.toString() + "/" + currentYear.toString();
 
     public Scene_ManageClass sceneManageClass = new Scene_ManageClass();
     public ManageClassController()
