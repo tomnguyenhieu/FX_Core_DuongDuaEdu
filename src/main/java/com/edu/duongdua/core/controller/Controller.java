@@ -13,6 +13,7 @@ public class Controller
     public BillDAO billDAO = new BillDAO();
     public LessonDAO lessonDAO = new LessonDAO();
     public CommentDAO commentDAO = new CommentDAO();
+    public ScheduleDAO scheduleDAO = new ScheduleDAO();
 
     public List<Classes> classesList = classesDao.getAllClasses();
     public List<Account> teachersList = accountDAO.getAllAccountByRole(2);
