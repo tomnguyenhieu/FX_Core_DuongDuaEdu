@@ -43,8 +43,8 @@ public class Scene_DashboardStudent {
     private Label avgAgeLabel = new Label("0");
     public ComboBox<Integer> yearComboBox = new ComboBox<>();
 
-    double maxLesson = 50;
-    double maxStudent = 20;
+    double maxLesson = 100;
+    double maxStudent = 35;
     int ageUnder12Count = 0;
     int ageUnder22Count = 0;
     int ageOver22Count = 0;

@@ -3,9 +3,7 @@ package com.edu.duongdua.core.controller;
 import com.edu.duongdua.core.model.*;
 import com.edu.duongdua.core.view.Scene_DashboardStudent;
 import javafx.event.ActionEvent;
-import javafx.scene.chart.XYChart;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,16 +102,14 @@ public class DashboardStudentController extends Controller {
     public List<List<Integer>> countTotalStudentByYear(String year){
         List<List<Integer>> dataList = new ArrayList<>();
         List<String> allMonth = new ArrayList<>(); // lưu trữ để kiểm tra tháng đã đếm hay chưa
-
-        for(Lesson lesson : lessonList){
-            // Lấy lesson của năm đó
-            if(lesson.getTitle().substring(6).equals(year)){
+        for(Bill bill : billList){
+            if(bill.getType() == 4 && bill.getTime().substring(3).equals(year)){
                 List<Integer> monthList = new ArrayList<>(); // lưu trữ tháng và số học sinh tháng đó
-                String month = lesson.getTitle().substring(3,5); // Lấy tháng
-                int totalStudent = countStudent(month + "/" + year); // Cộng tổng học sinh tháng/năm đó
+                String month = bill.getTime().substring(0,2);
+                int totalStudent = countStudent(bill.getTime());
                 if(!allMonth.contains(month)){
                     // Chưa có tháng vừa xử lí
-                    allMonth.add(lesson.getTitle().substring(3,5));
+                    allMonth.add(month);
                     monthList.add(Integer.parseInt(month));
                     monthList.add(totalStudent);
                     dataList.add(monthList);
@@ -136,15 +132,13 @@ public class DashboardStudentController extends Controller {
 
     public int countStudent(String date){
         int totalStudent = 0;
-        for(Lesson lesson : lessonList){
-            if(lesson.getTitle().substring(3).equals(date)){
-                List<Integer> studentIdList = new ArrayList<>(); // Lưu id học sinh để không đếm lại
-                for(Comment comment : commentList){
-                    int studentId = comment.getStudentId();
-                    if(comment.getLessonId() == lesson.getId() && !studentIdList.contains(studentId)){
-                        totalStudent++;
-                        studentIdList.add(studentId);
-                    }
+        List<Integer> studentIdList = new ArrayList<>(); // Lưu id học sinh để không đếm lại
+        for(Bill bill : billList){
+            if(bill.getTime().equals(date) && bill.getType() == 4){
+                int studentId = bill.getAccount_id();
+                if(!studentIdList.contains(studentId)){
+                    totalStudent++;
+                    studentIdList.add(studentId);
                 }
             }
         }
