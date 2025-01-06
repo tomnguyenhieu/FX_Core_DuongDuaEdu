@@ -106,7 +106,6 @@ public class ManageStudentController extends Controller implements EventHandler<
                 break;
             case "Delete":
                 deleteStudent(sceneManageStudent.studentTable.getSelectionModel().getSelectedItem());
-                System.out.println("Deleteee");
                 break;
             case "Add":
                 edit = false;
@@ -114,7 +113,6 @@ public class ManageStudentController extends Controller implements EventHandler<
                 break;
             case "ModalConfirm":
                 if(!edit){
-                    System.out.println("Added");
                     try{
                         Account tmpStudent = new Account();
                         tmpStudent.setName(sceneManageStudent.getName());
@@ -142,7 +140,6 @@ public class ManageStudentController extends Controller implements EventHandler<
                         throw new RuntimeException(e);
                     }
                 }else {
-                    System.out.println("Editted");
                     try{
                         Account tmpStudent = new Account();
                         tmpStudent.setId(sceneManageStudent.studentTable.getSelectionModel().getSelectedItem().getId());
@@ -160,7 +157,6 @@ public class ManageStudentController extends Controller implements EventHandler<
                         tmpStudent.setFee(sceneManageStudent.getFee());
                         tmpStudent.setStatus(sceneManageStudent.getStatus());
                         if(validateStudent(tmpStudent)){
-                            System.out.println(tmpStudent.getStatus());
                             accountDAO.updateStudent(tmpStudent);
                             sceneManageStudent.refreshStudentTable(getStudentTableData());
                             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
@@ -180,7 +176,6 @@ public class ManageStudentController extends Controller implements EventHandler<
                 }
                 break;
             case "UpdateBill":
-                System.out.println(sceneManageStudent.billTable.getSelectionModel().getSelectedItem().getTime());
                 Bill bill = billDAO.findBillById(sceneManageStudent.billTable.getSelectionModel().getSelectedItem().getId());
                 bill.setStatus("Đã thanh toán");
                 billDAO.updateBill(bill);

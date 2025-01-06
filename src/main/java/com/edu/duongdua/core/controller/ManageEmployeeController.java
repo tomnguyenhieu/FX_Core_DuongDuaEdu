@@ -36,7 +36,6 @@ public class ManageEmployeeController extends Controller implements EventHandler
                 billObj.setAccount_id(employee.getId());
                 billObj.setTime(time);
                 billObj.setTotal_price(employee.getSalary());
-                System.out.println(time);
                 billObj.setType(2);
                 boolean isDuplicate = false;
                 for (Bill bill : billDAO.getAllBill())
@@ -115,7 +114,6 @@ public class ManageEmployeeController extends Controller implements EventHandler
                 break;
             case "Delete":
                 deleteEmployee(sceneManageEmployee.employeeTable.getSelectionModel().getSelectedItem());
-                System.out.println("Deleteee");
                 break;
             case "Add":
                 edit = false;
@@ -123,7 +121,6 @@ public class ManageEmployeeController extends Controller implements EventHandler
                 break;
             case "ModalConfirm":
                 if(!edit){
-                    System.out.println("Added");
                     try{
                         Account tmpEmployee = new Account();
                         tmpEmployee.setName(sceneManageEmployee.getName());
@@ -148,7 +145,6 @@ public class ManageEmployeeController extends Controller implements EventHandler
                         throw new RuntimeException(e);
                     }
                 }else {
-                    System.out.println("Editted");
                     try{
                         Account tmpEmployee = new Account();
                         tmpEmployee.setId(sceneManageEmployee.employeeTable.getSelectionModel().getSelectedItem().getId());
@@ -182,7 +178,6 @@ public class ManageEmployeeController extends Controller implements EventHandler
                 }
                 break;
             case "UpdateBill":
-                System.out.println(sceneManageEmployee.billTable.getSelectionModel().getSelectedItem().getTime());
                 Bill bill = billDAO.findBillById(sceneManageEmployee.billTable.getSelectionModel().getSelectedItem().getId());
                 bill.setStatus("Đã thanh toán");
                 billDAO.updateBill(bill);

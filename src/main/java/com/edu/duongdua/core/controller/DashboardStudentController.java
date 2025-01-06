@@ -219,7 +219,6 @@ public class DashboardStudentController extends Controller {
 
     public void handleOnAction(ActionEvent event){
         String year = sceneDashboardStudent.yearComboBox.getValue().toString();
-        System.out.println(year);
         sceneDashboardStudent.refreshLineChart(countTotalStudentByYear(year));
     }
 }

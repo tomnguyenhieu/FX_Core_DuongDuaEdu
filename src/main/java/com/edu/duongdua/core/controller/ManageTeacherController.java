@@ -84,7 +84,6 @@ public class ManageTeacherController extends Controller implements EventHandler<
                 }
                 break;
             case "UpdateBill":
-                System.out.println(sceneManageTeacher.billTable.getSelectionModel().getSelectedItem().getTime());
                 Bill bill = billDAO.findBillById(sceneManageTeacher.billTable.getSelectionModel().getSelectedItem().getId());
                 bill.setStatus("Đã thanh toán");
                 billDAO.updateBill(bill);
@@ -143,7 +142,6 @@ public class ManageTeacherController extends Controller implements EventHandler<
                         tmpTeacher.setSalary(Integer.parseInt(sceneManageTeacher.getSalary()));
                         tmpTeacher.setStatus(sceneManageTeacher.getStatus());
                         if(validateTeacher(tmpTeacher)){
-                            System.out.println(tmpTeacher.getStatus());
                             accountDAO.updateTeacher(tmpTeacher);
                             sceneManageTeacher.refreshTeacherTable(getTeacherTableData());
                             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();

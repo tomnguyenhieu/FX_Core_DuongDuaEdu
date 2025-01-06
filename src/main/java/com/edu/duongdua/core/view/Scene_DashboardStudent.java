@@ -444,7 +444,6 @@ public class Scene_DashboardStudent {
             int month = year.get(0);
             int totalStudent = year.get(1);
             dataSeries.getData().add(new XYChart.Data<>(Integer.toString(month), totalStudent));
-            System.out.println(month + " " + totalStudent);
         }
         totalStudentLineChart.getData().clear();
         totalStudentLineChart.getData().add(dataSeries);
@@ -454,7 +453,6 @@ public class Scene_DashboardStudent {
         agePieChart.setTitle("Tỉ lệ tuổi học viên");
         agePieChart.setPrefHeight(300);
         agePieChart.setPrefWidth(324);
-        System.out.println(ageUnder12Count);
 
         PieChart.Data ageUnder12CountData = new PieChart.Data("Dưới 12 tuổi",ageUnder12Count);
         PieChart.Data ageUnder22CountData = new PieChart.Data("Dưới 22 tuổi",ageUnder22Count);

@@ -159,7 +159,6 @@ public class Scene_ManageStudent {
         label.setPrefWidth(672);
         label.setPrefHeight(84);
 
-
         Label label1 = new Label("Sửa ");
         label1.setFont(Font.font("System", FontWeight.NORMAL, 22));
         label1.setTextFill(Color.WHITE);
@@ -270,7 +269,6 @@ public class Scene_ManageStudent {
 
         studentTable.setId("StudentTable");
         studentTable.setOnMousePressed(event -> {
-            System.out.println("student tableeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
             double posX = event.getX();
             double posY = event.getY();
             ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(.15), billStackPane);
@@ -326,7 +324,6 @@ public class Scene_ManageStudent {
         root.setAlignment(Pos.TOP_RIGHT);
         root.setPadding(new Insets(25,20,0,20));
         root.setSpacing(20);
-
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -411,7 +408,6 @@ public class Scene_ManageStudent {
         phoneTextField.setPrefHeight(62);
         vBox6.getChildren().addAll(label5, phoneTextField);
         vBox6.setPadding(new Insets(0,15,0,0));
-
 
         Label label6 = new Label("Địa chỉ");
         label6.setFont(Font.font("System", FontWeight.NORMAL, 20));

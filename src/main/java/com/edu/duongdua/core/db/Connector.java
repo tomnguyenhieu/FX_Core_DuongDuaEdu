@@ -15,12 +15,9 @@ public class Connector
                     "jdbc:mysql://localhost:3306/duongduaeducation",
                     "root",
                     "");
-
-            System.out.println("Database connected.");
             return connect;
 
         } catch (Exception e) {
-            System.out.println(e);
             return null;
         }
     }
