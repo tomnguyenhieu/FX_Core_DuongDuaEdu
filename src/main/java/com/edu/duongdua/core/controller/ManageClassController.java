@@ -43,7 +43,8 @@ public class ManageClassController extends Controller implements EventHandler<Ev
     private Integer currentMonth = today.getMonthValue();
     private Integer currentYear = today.getYear();
     private String time = "0" + currentDay.toString() + "/0" + currentMonth.toString() + "/" + currentYear.toString();
-
+    private boolean edit = false;
+    private String tmpClassName = "";
     public Scene_ManageClass sceneManageClass = new Scene_ManageClass();
     public ManageClassController()
     {
@@ -124,6 +125,20 @@ public class ManageClassController extends Controller implements EventHandler<Ev
             alert.show();
         }
         classesDao.storeClass(classObj);
+    }
+
+    public void editClass(Event event)
+    {
+        AnchorPane iconContainer = (AnchorPane) event.getSource();
+        VBox vboxIcons = (VBox) iconContainer.getParent();
+        HBox hbox = (HBox) vboxIcons.getParent();
+        VBox vboxParent = (VBox) hbox.getParent();
+        Label classLabel = (Label) vboxParent.getChildren().getFirst();
+        String className = classLabel.getText();
+        tmpClassName = className;
+        sceneManageClass.createModalStage(className);
+        sceneManageClass.cbTeachersName.getItems().clear();
+        sceneManageClass.initComboBoxTeachersName(getActiveTeachers());
     }
 
     public void deleteClass(Event event)
@@ -240,6 +255,10 @@ public class ManageClassController extends Controller implements EventHandler<Ev
                 sceneManageClass.createModalStage(null);
                 sceneManageClass.initComboBoxTeachersName(getActiveTeachers());
                 break;
+            case "editBtn":
+                edit = true;
+                editClass(event);
+                break;
             case "trashBtn":
                 deleteClass(event);
                 break;
@@ -247,7 +266,7 @@ public class ManageClassController extends Controller implements EventHandler<Ev
                 loadDiaryScene(event);
                 break;
             case "confirmBtn":
-                if (!sceneManageClass.edit)
+                if (!edit)
                 {
                     storeClass();
                     sceneManageClass.getTilePane().getChildren().clear();
@@ -258,24 +277,32 @@ public class ManageClassController extends Controller implements EventHandler<Ev
                     alert.show();
                 } else
                 {
-                    Classes classObj = classesDao.findByName(sceneManageClass.tmpClassName);
+                    Classes classObj = classesDao.findByName(tmpClassName);
                     classObj.setClassName(sceneManageClass.inputClass.getText());
 
-                    for (Account teacher : accountDAO.getAllAccountByRole(2))
+                    if (sceneManageClass.cbTeachersName.getValue() != null)
                     {
-                        if (sceneManageClass.cbTeachersName.getValue().equals(teacher.getName()))
+                        for (Account teacher : accountDAO.getAllAccountByRole(2))
                         {
-                            classObj.setClassTeacherId(teacher.getId());
+                            if (sceneManageClass.cbTeachersName.getValue().equals(teacher.getName()))
+                            {
+                                classObj.setClassTeacherId(teacher.getId());
+                            }
                         }
-                    }
 
-                    classesDao.updateClass(classObj);
-                    sceneManageClass.getTilePane().getChildren().clear();
-                    sceneManageClass.displayClass(classesDao.getClassesInfo(1), this);
-                    sceneManageClass.modalStage.close();
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setContentText("Sua thanh cong!");
-                    alert.show();
+                        classesDao.updateClass(classObj);
+                        sceneManageClass.getTilePane().getChildren().clear();
+                        sceneManageClass.displayClass(classesDao.getClassesInfo(1), this);
+                        sceneManageClass.modalStage.close();
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setContentText("Sua thanh cong!");
+                        alert.show();
+                    } else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setContentText("Vui lòng chọn giáo viên!");
+                        alert.show();
+                    }
                 }
                 break;
             case "classInfoBtn":

@@ -66,7 +66,6 @@ public class Scene_ManageClass
     private Button confirmButton = new Button();
     public TextField inputClass = new TextField();
     public Stage modalStage = new Stage();
-    public boolean edit = false;
     public String tmpClassName;
     private Button btnConfirm = new Button();
     public ComboBox<String> cbClasses = new ComboBox<>();
@@ -372,15 +371,7 @@ public class Scene_ManageClass
         editIconContainer = new AnchorPane();
         editIconContainer.setId("editBtn");
         if (classObj.getClassDeleted() == 1) {
-            editIconContainer.setOnMouseClicked(event -> {
-                edit = true;
-                tmpClassName = classObj.getClassName();
-                createModalStage(tmpClassName);
-                ManageClassController manageClassController = new ManageClassController();
-                cbTeachersName.getItems().clear();
-                cbTeachersName.setValue(classObj.getClassTeacherName());
-                initComboBoxTeachersName(manageClassController.getActiveTeachers());
-            });
+            editIconContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
             editIconContainer.setMinSize(40, 52);
             editIconContainer.setCursor(Cursor.HAND);
 
