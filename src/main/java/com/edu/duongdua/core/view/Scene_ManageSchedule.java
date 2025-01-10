@@ -2,6 +2,7 @@ package com.edu.duongdua.core.view;
 
 import com.edu.duongdua.core.controller.ManageScheduleController;
 import com.edu.duongdua.core.model.Schedule;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,14 +11,14 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 
 public class Scene_ManageSchedule {
 
@@ -28,10 +29,16 @@ public class Scene_ManageSchedule {
     private Button deleteScheduleBtn;
     private ScrollPane scrollPane;
     private TilePane tilePane;
-    private ComboBox<String> cbDay = new ComboBox<>();
-    private ComboBox<String> cbClassName = new ComboBox<>();
-    private ComboBox<String> comboBoxDay = new ComboBox<>();
-    private ComboBox<String> comboBoxClassName = new ComboBox<>();
+    public ComboBox<String> cbDay = new ComboBox<>();
+    public ComboBox<String> cbClassName = new ComboBox<>();
+    public ComboBox<String> comboBoxDay = new ComboBox<>();
+    public ComboBox<String> comboBoxClassName = new ComboBox<>();
+    public TextField inputClassRoom = new TextField();
+    public TextField inputTime = new TextField();
+    public Label lblRoom= new Label ();
+    public Label lblTime = new Label();
+    public Stage modalStage = new Stage();
+    public Label headerLabel = new Label();
 
     public AnchorPane getAnchorPane() {
         return anchorPane;
@@ -41,8 +48,6 @@ public class Scene_ManageSchedule {
         this.anchorPane = anchorPane;
     }
 
-    public Stage modalStage = new Stage();
-
     public TilePane getTilePane() {
         return tilePane;
     }
@@ -51,13 +56,7 @@ public class Scene_ManageSchedule {
         this.tilePane = tilePane;
     }
 
-    private ManageScheduleController manageScheduleController;
-
-    public Scene_ManageSchedule(ManageScheduleController controller) {
-        this.manageScheduleController = controller;
-    }
-
-    public void createManageSchedule(List<Schedule> scheduleList) {
+    public void createManageSchedule(List<Schedule> scheduleList, EventHandler<ActionEvent> eventHandler) {
         anchorPane = new AnchorPane();
         anchorPane.setPrefSize(1000, 720);
         anchorPane.setStyle("-fx-background-color: #FFFFFF;");
@@ -87,7 +86,7 @@ public class Scene_ManageSchedule {
         addScheduleBtn.setCursor(Cursor.HAND);
         addScheduleBtn.setOnAction(event -> {
             cbDay.getItems().clear();
-            createAddModalStage();
+            createAddModalStage(eventHandler);
             modalStage.show();
         });
 
@@ -100,7 +99,7 @@ public class Scene_ManageSchedule {
         deleteScheduleBtn.setCursor(Cursor.HAND);
         deleteScheduleBtn.setOnAction(event -> {
             comboBoxDay.getItems().clear();
-            createDeleteModalStage();
+            createDeleteModalStage(eventHandler);
             modalStage.show();
         });
 
@@ -116,32 +115,49 @@ public class Scene_ManageSchedule {
         tilePane.setVgap(20);
         tilePane.setPadding(new Insets(50, 12, 12, 50));
 
-        for (int i = 2; i <= 7; i++) {
-            ComboBox<String> classNameComboBox = new ComboBox<>();
-            Set<String> classNames = manageScheduleController.getClassesByDay(i);
-            classNameComboBox.getItems().addAll(classNames);
-
-            int day = i;
-            classNameComboBox.setOnAction(event -> handleClassSelection(classNameComboBox, day));
-
-            VBox vb = initScheduleBox(String.valueOf(day), classNameComboBox);
-            tilePane.getChildren().add(vb);
-        }
-
         anchorPane.getChildren().addAll(vbox);
         vbox.getChildren().addAll(hbox, scrollPane);
         hbox.getChildren().addAll(label, addScheduleBtn, deleteScheduleBtn);
         scrollPane.setContent(tilePane);
     }
 
-    public void createAddModalStage() {
-        // Create main VBox
+
+    public void createComboBox (int day, Set<String> className, EventHandler<ActionEvent> eventHandler) {
+        ComboBox<String> classNameComboBox = new ComboBox<>();
+        classNameComboBox.setId("classNameCB");
+        classNameComboBox.getItems().addAll(className);
+
+        classNameComboBox.addEventHandler(ActionEvent.ACTION, eventHandler);
+
+        VBox vb = initScheduleBox(String.valueOf(day), classNameComboBox);
+        tilePane.getChildren().add(vb);
+    }
+
+    public List<String> getAvailableDays() {
+        List<String> allDays = new ArrayList<>();
+        for (int i = 2; i <= 7; i++) {
+            allDays.add("Thứ " + String.valueOf(i));
+        }
+        return allDays;
+    }
+
+    public void refreshData (Set<String> availableClasses) {
+        cbClassName.getItems().clear();
+        cbClassName.getItems().addAll(availableClasses);
+    }
+
+    public void loadData (Set<String> classNames) {
+        comboBoxClassName.getItems().clear();
+        comboBoxClassName.getItems().addAll(classNames);
+    }
+
+    public void createAddModalStage(EventHandler<ActionEvent> eventHandler) {
         VBox vBox = new VBox();
         vBox.setPrefHeight(500.0);
         vBox.setPrefWidth(474.0);
         vBox.setSpacing(20.0);
 
-        Label headerLabel = new Label("Vui lòng nhập thông tin");
+        headerLabel.setText("Vui lòng nhập thông tin");
         headerLabel.setPrefHeight(80.0);
         headerLabel.setPrefWidth(474.0);
         headerLabel.setStyle("-fx-background-color: #CE4848;");
@@ -154,32 +170,24 @@ public class Scene_ManageSchedule {
         inputVBox.setPrefWidth(474.0);
         inputVBox.setSpacing(10.0);
 
+        cbDay.setId("dayCB");
         cbDay.setPrefHeight(65.0);
         cbDay.setPrefWidth(434.0);
         cbDay.setPromptText("Nhập thứ");
         cbDay.setStyle("-fx-background-radius: 4;");
         VBox.setMargin(cbDay, new Insets(0, 20, 0, 20));
 
-        Set<String> days = manageScheduleController.getAvailableDays();
+        List<String> days = getAvailableDays();
         cbDay.getItems().addAll(days);
 
-        ComboBox<String> cbClassName = new ComboBox<>();
         cbClassName.setPrefHeight(65.0);
         cbClassName.setPrefWidth(434.0);
         cbClassName.setPromptText("Nhập tên lớp ");
         cbClassName.setStyle("-fx-background-radius: 4;");
         VBox.setMargin(cbClassName, new Insets(0, 20, 0, 20));
 
-        cbDay.setOnAction(event -> {
-            String selectedDay = cbDay.getValue();
-            if (selectedDay != null) {
-                Set<String> availableClasses = manageScheduleController.getClassName(selectedDay);
-                cbClassName.getItems().clear();
-                cbClassName.getItems().addAll(availableClasses);
-            }
-        });
+        cbDay.addEventHandler(ActionEvent.ACTION, eventHandler);
 
-        TextField inputClassRoom = new TextField();
         inputClassRoom.setPrefHeight(65.0);
         inputClassRoom.setPrefWidth(474.0);
         inputClassRoom.setPromptText("Nhập phòng học");
@@ -187,7 +195,6 @@ public class Scene_ManageSchedule {
         inputClassRoom.setFont(new Font(18.0));
         VBox.setMargin(inputClassRoom, new Insets(0, 20, 0, 20));
 
-        TextField inputTime = new TextField();
         inputTime.setPrefHeight(65.0);
         inputTime.setPrefWidth(474.0);
         inputTime.setPromptText("Nhập giờ học ");
@@ -204,34 +211,15 @@ public class Scene_ManageSchedule {
         buttonHBox.setSpacing(15.0);
 
         Button btnConfirm = new Button("Xác nhận");
+        btnConfirm.setId("confirmAddBtn");
         btnConfirm.setPrefHeight(47.0);
         btnConfirm.setPrefWidth(128.0);
         btnConfirm.setStyle("-fx-background-color: #30475E; -fx-background-radius: 10px;");
         btnConfirm.setTextFill(javafx.scene.paint.Color.WHITE);
         btnConfirm.setFont(new Font(20.0));
         btnConfirm.setCursor(Cursor.HAND);
-        btnConfirm.setOnAction(event -> {
-            String day = cbDay.getValue();
-            String className = cbClassName.getValue();
-            String classRoom = inputClassRoom.getText();
-            String time = inputTime.getText();
 
-            if (day == null || className == null || classRoom == null || time == null) {
-                showAlert("Kiểm tra lại thông tin!", false);
-            } else {
-                if (!isValidTimeFormat(time)){
-                    showAlert("Thời gian không hợp lệ! Vui lòng nhập theo định dạng: 14h00-17h00.", false);
-                } else {
-                    boolean success = manageScheduleController.addSchedule(day, className, classRoom, time);
-                    if (success) {
-                        showAlert( "Thêm lịch học thành công!", true);
-                        modalStage.close();
-                    } else {
-                        showAlert("Thêm lịch học thất bại!", false);
-                    }
-                }
-            }
-        });
+        btnConfirm.addEventHandler(ActionEvent.ACTION, eventHandler);
 
         Button btnCancel = new Button("Hủy");
         btnCancel.setPrefHeight(47.0);
@@ -240,9 +228,11 @@ public class Scene_ManageSchedule {
         btnCancel.setTextFill(javafx.scene.paint.Color.WHITE);
         btnCancel.setFont(new Font(20.0));
         btnCancel.setCursor(Cursor.HAND);
-        btnCancel.setOnAction(event -> modalStage.close());
+        btnCancel.setOnAction(event -> {
+            modalStage.close();
+        });
 
-        buttonHBox.getChildren().addAll(btnConfirm, btnCancel);
+        buttonHBox.getChildren().addAll(btnCancel, btnConfirm);
 
         vBox.getChildren().addAll(headerLabel, inputVBox, buttonHBox);
 
@@ -250,8 +240,8 @@ public class Scene_ManageSchedule {
         modalStage.setTitle("Thêm lịch học");
     }
 
-    public void createDeleteModalStage() {
-        Label headerLabel = new Label("Vui lòng nhập thông tin");
+    public void createDeleteModalStage(EventHandler<ActionEvent> eventHandler) {
+        headerLabel.setText("Vui lòng nhập thông tin");
         headerLabel.setStyle("-fx-background-color: #CE4848;");
         headerLabel.setTextFill(javafx.scene.paint.Color.WHITE);
         headerLabel.setFont(new Font("System Bold", 36));
@@ -259,52 +249,32 @@ public class Scene_ManageSchedule {
         headerLabel.setPrefWidth(474);
         headerLabel.setAlignment(javafx.geometry.Pos.CENTER);
 
-        ComboBox<String> comboBoxDay = new ComboBox<>();
+        comboBoxDay.setId("dayComboBox");
         comboBoxDay.setPrefHeight(40);
         comboBoxDay.setPrefWidth(150);
         comboBoxDay.setPromptText("Ngày học");
         comboBoxDay.setStyle("-fx-background-radius: 4;");
         comboBoxDay.setPadding(new Insets(0, 20, 0, 20));
 
-        Set<String> days = manageScheduleController.getAvailableDays();
+        List<String> days = getAvailableDays();
         comboBoxDay.getItems().addAll(days);
 
-        ComboBox<String> comboBoxClassName = new ComboBox<>();
+        comboBoxClassName.setId("classNameComboBox");
         comboBoxClassName.setPrefHeight(40);
         comboBoxClassName.setPrefWidth(150);
         comboBoxClassName.setPromptText("Tên lớp");
         comboBoxClassName.setStyle("-fx-background-radius: 4;");
         comboBoxClassName.setPadding(new Insets(0, 20, 0, 20));
 
-        comboBoxDay.setOnAction(event -> {
-            String selectedDay = comboBoxDay.getValue().substring(4);
-            if (selectedDay != null) {
-                Set<String> classNames = manageScheduleController.getClassesByDay(Integer.parseInt(selectedDay));
-                comboBoxClassName.getItems().clear();
-                comboBoxClassName.getItems().addAll(classNames);
-            }
-        });
+        comboBoxDay.addEventHandler(ActionEvent.ACTION, eventHandler);
 
-        Label lblRoom= new Label("Phòng học:");
-        Label lblTime = new Label("Giờ học:");
+        lblRoom.setText("Phòng học:");
+        lblTime.setText("Giờ học:");
 
         VBox vBox1 = new VBox(10, comboBoxDay, comboBoxClassName);
         VBox vBox2 = new VBox(10, lblRoom, lblTime);
 
-        comboBoxClassName.setOnAction(event -> {
-            String selectedClass = comboBoxClassName.getValue();
-            String selectedDay = comboBoxDay.getValue().substring(4);
-            if (selectedClass != null && selectedDay != null) {
-                Schedule schedule = manageScheduleController.getScheduleByClassNameAndDay(selectedClass, Integer.parseInt(selectedDay));
-                if (schedule != null) {
-                    lblRoom.setText("Phòng học: " + schedule.getClassRoom());
-                    lblTime.setText("Giờ học: " + schedule.getTime());
-                } else {
-                    lblRoom.setText("Phòng học: ");
-                    lblTime.setText("Giờ học: ");
-                }
-            }
-        });
+        comboBoxClassName.addEventHandler(ActionEvent.ACTION, eventHandler);
 
         HBox hBox = new HBox(20, vBox1, vBox2);
         hBox.setPrefHeight(100);
@@ -317,32 +287,20 @@ public class Scene_ManageSchedule {
         btnCancel.setTextFill(javafx.scene.paint.Color.WHITE);
         btnCancel.setFont(new Font(20));
         btnCancel.setCursor(Cursor.HAND);
-        btnCancel.setOnAction(event -> modalStage.close());
+        btnCancel.setOnAction(event -> {
+            modalStage.close();
+        });
 
         Button btnConfirm = new Button("Xác nhận");
+        btnConfirm.setId("confirmDeleteBtn");
         btnConfirm.setPrefHeight(47);
         btnConfirm.setPrefWidth(128);
         btnConfirm.setStyle("-fx-background-color: #30475E; -fx-background-radius: 10px;");
         btnConfirm.setTextFill(javafx.scene.paint.Color.WHITE);
         btnConfirm.setFont(new Font(20));
         btnConfirm.setCursor(Cursor.HAND);
-        btnConfirm.setOnAction(event -> {
-            String day = comboBoxDay.getValue();
-            String classRoom = lblRoom.getText().substring(11);
-            String time = lblTime.getText().substring(9);
 
-            if (day == null || classRoom == null || time == null) {
-                showAlert("Kiểm tra lại thông tin!", false);
-            } else {
-                boolean success = manageScheduleController.deleteSchedule(day, classRoom, time);
-                if (success) {
-                    showAlert( "Xóa lịch học thành công!", true);
-                    modalStage.close();
-                } else {
-                    showAlert("Xóa lịch học thất bại!", false);
-                }
-            }
-        });
+        btnConfirm.addEventHandler(ActionEvent.ACTION, eventHandler);
 
         HBox hBoxButtons = new HBox(15, btnCancel, btnConfirm);
         hBoxButtons.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
@@ -359,19 +317,18 @@ public class Scene_ManageSchedule {
         modalStage.setTitle("Xóa lịch học");
     }
 
-    private void showAlert(String message, boolean closeWindow) {
+    public void showAlert(String message, boolean closeWindow) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setContentText(message);
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK && closeWindow) {
-            Scene scene = cbDay.getScene();
+            Scene scene = headerLabel.getScene();
             if (scene != null) {
                 Stage stage = (Stage) scene.getWindow();
                 stage.close();
             }
         }
-
     }
 
     public VBox initScheduleBox(String day, ComboBox classNameComboBox) {
@@ -413,23 +370,7 @@ public class Scene_ManageSchedule {
         return vBox;
     }
 
-    private void handleClassSelection(ComboBox<String> classComboBox, int day) {
-        String selectedClass = classComboBox.getValue();
-
-        if (selectedClass != null) {
-            Schedule schedule = manageScheduleController.getScheduleByClassNameAndDay(selectedClass, day);
-            if (schedule != null) {
-                updateClassDetails(schedule.getClassRoom(), schedule.getTime(), day);
-            } else {
-                resetClassDetails();
-            }
-        } else {
-            resetClassDetails();
-        }
-    }
-
-
-    private void updateClassDetails(String classRoom, String time, int day) {
+    public void updateClassDetails(String classRoom, String time, int day) {
         for (Node node : tilePane.getChildren()) {
             if (node instanceof VBox) {
                 VBox vBox = (VBox) node;
@@ -449,14 +390,13 @@ public class Scene_ManageSchedule {
         }
     }
 
-    private void resetClassDetails() {
+    public void resetClassDetails() {
         for (Node node : tilePane.getChildren()) {
             if (node instanceof VBox) {
                 VBox vBox = (VBox) node;
                 VBox content = (VBox) vBox.getChildren().get(1);
                 VBox details = (VBox) content.getChildren().get(1);
 
-                // Đặt lại chi tiết
                 Label roomLabel = (Label) details.getChildren().get(0);
                 Label timeLabel = (Label) details.getChildren().get(1);
 
